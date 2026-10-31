@@ -1,0 +1,116 @@
+# ---------------------------------------------------------------------------
+# OR1 PDK — build artefacts, extracted data and editor/EDA leftovers
+# ---------------------------------------------------------------------------
+
+# librelane / OpenLane runs and per-run state
+/runs/
+/**/runs/
+**/runs/RUN_*/
+**/runs/*.log
+*.state
+state_in.json
+state_out.json
+resolved.json
+flow.log
+error.log
+warning.log
+runtime.txt
+process_stats.json
+
+# Extraction / netlist / simulation by-products
+*.ext
+*.res.ext
+*.sim
+*.nodes
+*.al
+*.spice.lock
+*.raw
+*.log
+*.ff
+*.ff.mmap
+*.sp
+*.spice~
+*.out
+*.spef
+*.sdf
+*.vcd
+*.fst
+*.tr0
+*.tr1
+*.ic
+*.dc
+*.ac
+*.tran
+*.meas
+*.lis
+
+# magic
+*.mag~
+*.mag~~
+*.ext~
+*.drc
+*.feedback
+*.ext2spice.log
+*.extresist.log
+*.cif
+*.magic.prf
+*.prf
+
+# KLayout
+*.lyrdb
+*.lvsdb
+*.gds.lock
+*.oas.lock
+*.klayout_crash.log
+*.xml.gz
+
+# xschem / ngspice
+*.netlist
+*.xschem_history
+.xschem/
+simulation/
+*.ngspice
+*.spicebin
+*.cfg
+
+# synthesis / PnR intermediates
+*.blif
+*.json
+!*/lib/*.json
+*.nl.v
+*.pnl.v
+*.def
+*.odb
+*.odb.*
+*.sdc
+*.tf
+*.lef.tmp
+*.lib.tmp
+*.gds.tmp
+*.maglef.tmp
+
+# python / tooling
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+.venv/
+venv/
+
+# editors / OS
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# local scratch
+/tmp/
+scratch/
+*.bak
+*.orig
+*.rej

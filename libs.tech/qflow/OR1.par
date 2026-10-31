@@ -1,0 +1,61 @@
+# or1.par --- Parameter file for GrayWolf (OR1 / OpenRule1um)
+# NOTE:  all distance units are in centimicrons (0.01um) unless otherwise stated
+
+RULES
+    # values are resistance in ohms/sq and capacitance in fF/um^2
+    layer metal1 0.07 0.020 horizontal
+    layer metal2 0.07 0.015 vertical
+    layer metal3 0.07 0.010 horizontal
+
+    via via12 metal1 metal2
+    via via23 metal2 metal3
+
+    width metal1 100
+    width metal2 100
+    width metal3 100
+    width via12 100
+    width via23 100
+
+    # Set spacing = track pitch - width, so that GrayWolf places pins
+    # on the right pitch.
+    # Pitches are (in um):
+    # metal1 = 2.0, metal2 = 2.0, metal3 = 2.0
+
+    spacing metal1 metal1 100
+    spacing metal2 metal2 100
+    spacing metal3 metal3 100
+
+    # Stacked vias allowed
+    spacing via12 via23 0
+
+    overhang via12 metal1 50
+    overhang via12 metal2 50
+
+    overhang via23 metal2 50
+    overhang via23 metal3 50
+ENDRULES
+
+*vertical_wire_weight : 1.0
+*vertical_path_weight : 1.0
+*padspacing           : variable
+*rowSep		      : 0.0   0
+*track.pitch	      : 200
+*minimum_pad_space    : 300
+*gridX		      : 200
+*gridY		      : 200
+*gridOffsetX 	      : 0
+*gridOffsetY 	      : 0
+*graphics.wait        : off
+*last_chance.wait     : off
+*random.seed	      : 12345
+
+TWMC*chip.aspect.ratio : 0.75
+
+TWSC*feedThruWidth    : 200 layer 1
+TWSC*do.global.route  : on
+TWSC*ignore_feeds     : true
+TWSC*call_row_evener	: true
+TWSC*even_rows_maximally : true
+
+GENR*row_to_tile_spacing: 1
+GENR*flip_alternate_rows : 1

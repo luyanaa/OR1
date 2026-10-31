@@ -1,0 +1,22 @@
+# counter_unroute.def snippet — qflow/qrouter workaround for net _9_
+#
+# If `qflow route` reports:
+#   Error:  Tap position N,N layer 1 not marked as source!
+#   List of failed nets follows: _9_
+# then net _9_ (driver _33_/NAND2X1.Y -> _34_/NAND2X1.B) needs a fixed
+# pre-route segment.  The 2um-wide cell-LEF pins line up exactly on the
+# routing pitch, so some taps land on grid boundaries and never get marked
+# as source.  Add the segment below to counter_unroute.def inside NETS,
+# copy counter_unroute.def over counter.def, and re-run qrouter.sh.
+#
+# Coordinates below assume the usual placement:
+#   _33_ NAND2X1 + PLACED ( 1700 3100 ) N    -> Y pin abs (24,44)-(26,46)
+#   _34_ NAND2X1 + PLACED ( 2650 3100 ) FN   -> B pin abs (30,50.5)-(32,52.5)
+# Re-derive them from your counter.def if the placement differs.
+
+- _9_
+  ( _34_ B )
+  ( _33_ Y )
++ ROUTED metal2 ( 2500 4600 ) ( * 4700 ) M2_M3
+  NEW metal3 ( 2500 4700 ) ( 3100 * ) M3_M2
+  NEW metal2 ( 3100 4700 ) ( * 5100 ) ;

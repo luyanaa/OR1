@@ -1,0 +1,91 @@
+
+.subckt BUFX2 VDD A Y VSS
+M0 VDD A a_2_6# VDD pfet w=4u l=0.4u
++ ad=0p pd=0u as=0p ps=0u 
+M1 Y a_2_6# VDD VDD pfet w=8u l=0.4u
++ ad=0p pd=0u as=0p ps=0u 
+M2 VSS A a_2_6# VSS nfet w=2u l=0.4u
++ ad=0p pd=0u as=0p ps=0u 
+M3 Y a_2_6# VSS VSS nfet w=4u l=0.4u
++ ad=0p pd=0u as=0p ps=0u 
+.ends BUFX2
+
+.subckt DFFPOSX1 VDD VSS CLK D Q QB
+M0 VDD CLK a$3 VDD pfet w=6u l=1u
+M1 a$5 a$3 VDD VDD pfet w=6u l=1u
+M2 a$17 D VDD VDD pfet w=6u l=1u
+M3 a$2 a$3 a$17 VDD pfet w=6u l=1u
+M4 a$18 a$5 a$2 VDD pfet w=6u l=1u
+M5 VDD a$7 a$18 VDD pfet w=6u l=1u
+M6 a$7 a$2 VDD VDD pfet w=6u l=1u
+M7 a$19 a$7 VDD VDD pfet w=6u l=1u
+M8 a$8 a$5 a$19 VDD pfet w=6u l=1u
+M9 a$20 a$3 a$8 VDD pfet w=6u l=1u
+M10 VDD a$9 a$20 VDD pfet w=6u l=1u
+M11 a$9 a$8 VDD VDD pfet w=6u l=1u
+M12 VDD a$9 QB VDD pfet w=6u l=1u
+M13 Q QB VDD VDD pfet w=6u l=1u
+M14 VSS CLK a$3 VSS nfet w=2u l=1u
+M15 a$5 a$3 VSS VSS nfet w=2u l=1u
+M16 a$11 D VSS VSS nfet w=2u l=1u
+M17 a$2 a$5 a$11 VSS nfet w=2u l=1u
+M18 a$12 a$3 a$2 VSS nfet w=2u l=1u
+M19 VSS a$7 a$12 VSS nfet w=2u l=1u
+M20 a$7 a$2 VSS VSS nfet w=2u l=1u
+M21 a$13 a$7 VSS VSS nfet w=2u l=1u
+M22 a$8 a$3 a$13 VSS nfet w=2u l=1u
+M23 a$14 a$5 a$8 VSS nfet w=2u l=1u
+M24 VSS a$9 a$14 VSS nfet w=2u l=1u
+M25 a$9 a$8 VSS VSS nfet w=2u l=1u
+M26 VSS a$9 QB VSS nfet w=2u l=1u
+M27 Q QB VSS VSS nfet w=2u l=1u
+.ends DFFPOSX1
+
+.subckt INVX1 VDD A Y VSS
+M0 Y A VDD VDD pfet w=4u l=0.4u
++ ad=0p pd=0u as=0p ps=0u 
+M1 Y A VSS VSS nfet w=2u l=0.4u
++ ad=0p pd=0u as=0p ps=0u 
+.ends INVX1
+
+.subckt NAND2X1 VDD Y A B VSS
+M0 Y A VDD VDD pfet w=4u l=0.4u
++ ad=0p pd=0u as=0p ps=0u 
+M1 VDD B Y VDD pfet w=4u l=0.4u
++ ad=0p pd=0u as=0p ps=0u 
+M2 a_9_6# A VSS VSS nfet w=4u l=0.4u
++ ad=0p pd=0u as=0p ps=0u 
+M3 Y B a_9_6# VSS nfet w=4u l=0.4u
++ ad=0p pd=0u as=0p ps=0u 
+.ends NAND2X1
+
+.subckt NOR2X1 VDD B Y A VSS
+M0 a_9_54# A VDD VDD pfet w=8u l=0.4u
++ ad=0p pd=0u as=0p ps=0u 
+M1 Y B a_9_54# VDD pfet w=8u l=0.4u
++ ad=0p pd=0u as=0p ps=0u 
+M2 Y A VSS VSS nfet w=2u l=0.4u
++ ad=0p pd=0u as=0p ps=0u 
+M3 VSS B Y VSS nfet w=2u l=0.4u
++ ad=0p pd=0u as=0p ps=0u 
+.ends NOR2X1
+
+.subckt FILL VDD VSS
+.ends FILL
+
+.subckt FILL_05 VDD VSS
+.ends FILL_05
+
+.subckt FILL_10 VDD VSS
+.ends FILL_10
+
+.subckt FILL_15 VDD VSS
+.ends FILL_15
+
+.subckt FILL_20 VDD VSS
+.ends FILL_20
+
+.subckt FILL_25 VDD VSS
+.ends FILL_25
+.subckt TAP VDD VSS
+.ends TAP

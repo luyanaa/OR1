@@ -1,0 +1,36 @@
+#-----------------------------------------------------
+# .magicrc startup file for OR1 (OpenRule1um)
+#-----------------------------------------------------
+# PDK_ROOT/PDK are exported by librelane; fall back to the installed tree.
+if {[info exists ::env(PDK_ROOT)]} {
+    set or1_root $::env(PDK_ROOT)
+} else {
+    set or1_root /grid/OpenRule1um/OR1PDK
+}
+if {[info exists ::env(PDK)]} {
+    set or1_pdk $::env(PDK)
+} else {
+    set or1_pdk OR1
+}
+
+path sys +$or1_root/$or1_pdk/libs.tech/magic
+path sys +$or1_root/$or1_pdk/libs.ref/or1_fd_sc/mag
+tech load OR1 -noprompt
+set GND vss
+set VDD vdd
+
+drc euclidean on
+drc off
+
+# ---------------------------------------------------------------------------
+# Parasitic resistance extraction options (magic >= 8.3.597)
+#
+# `extresist threshold` is a cutoff in MILLIOHMS on the lumped node resistance:
+# only nodes above it get a detailed resistor network.  The default is 10 ohm,
+# which silently drops every on-chip metal segment (a 100 um x 2 um metal2 wire
+# is 50 squares = 1.4 ohm), leaving the netlist with zero resistors.  Set it to
+# 0 so all nodes are considered, and lower `minres` (default 1 ohm) so short
+# segments are not pruned out of the network.
+# ---------------------------------------------------------------------------
+extresist threshold 0
+extresist minres 0

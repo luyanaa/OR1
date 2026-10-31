@@ -1,0 +1,609 @@
+# OR1 cell LEF for qflow: original pin rects, metal2-only signal pins
+VERSION 5.4 ;
+NAMESCASESENSITIVE ON ;
+BUSBITCHARS "[]" ;
+DIVIDERCHAR "/" ;
+UNITS
+  DATABASE MICRONS 1000 ;
+END UNITS
+
+MACRO BUFX2
+  CLASS CORE ;
+  SOURCE USER ;
+  ORIGIN 0 0 ;
+  SIZE 12.500 BY 30.000 ;
+  SYMMETRY X Y ;
+  SITE unit ;
+  
+    PIN A
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER metal2 ;
+        RECT 1 14.5 3 16.5 ;
+    END
+  END A
+    PIN VDD
+    DIRECTION INPUT ;
+    USE POWER ;
+    PORT
+      LAYER metal1 ;
+        RECT -0.5 28.5 13 30.5 ;
+    END
+  END VDD
+    PIN VSS
+    DIRECTION INPUT ;
+    USE GROUND ;
+    PORT
+      LAYER metal1 ;
+        RECT -0.5 -0.5 13 1.5 ;
+    END
+  END VSS
+    PIN Y
+    DIRECTION OUTPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER metal2 ;
+        RECT 7 13.8 9 15.8 ;
+    END
+  END Y
+  OBS
+    LAYER metal1 ;
+      WIDTH 1.400 ;
+      PATH 1.800 21.300 1.800 24.500 ;
+      WIDTH 1.000 ;
+      PATH 1.800 20.500 1.800 18.000 4.500 18.000 4.500 7.500 1.800 7.500 1.800 3.800 ;
+      WIDTH 1.400 ;
+      PATH 4.800 21.300 4.800 28.500 ;
+      WIDTH 1.000 ;
+      PATH 4.800 1.000 4.800 3.800 ;
+      WIDTH 1.400 ;
+      PATH 7.800 21.300 7.800 24.500 ;
+      WIDTH 1.000 ;
+      PATH 7.800 3.900 7.800 20.500 ;
+      WIDTH 1.000 ;
+      PATH 10.800 1.000 10.800 3.800 ;
+      WIDTH 1.400 ;
+      PATH 10.800 21.300 10.800 28.500 ;
+      WIDTH 1.400 ;
+      PATH 10.800 21.300 10.800 24.500 ;
+
+    VIA 1.800 24.500  dcont ;
+    VIA 1.800 3.800  dcont ;
+    VIA 1.800 20.500  dcont ;
+    VIA 1.800 22.500  dcont ;
+    VIA 4.800 3.800  dcont ;
+    VIA 4.800 24.500  dcont ;
+    VIA 4.800 20.500  dcont ;
+    VIA 4.800 22.500  dcont ;
+    VIA 7.800 24.500  dcont ;
+    VIA 7.800 22.500  dcont ;
+    VIA 7.800 20.500  dcont ;
+    VIA 7.800 3.800  dcont ;
+    VIA 10.800 3.800  dcont ;
+    VIA 10.800 20.500  dcont ;
+    VIA 10.800 22.500  dcont ;
+    VIA 10.800 24.500  dcont ;
+    VIA 5.000 29.500  nsubcont ;
+    VIA 5.300 11.500  pcont ;
+    VIA 2.000 15.500  pcont ;
+    VIA 5.000 0.500  psubcont ;
+  END
+END BUFX2
+
+MACRO DFFPOSX1
+  CLASS CORE ;
+  SOURCE USER ;
+  ORIGIN 0 0 ;
+  SIZE 52.000 BY 30.000 ;
+  SYMMETRY X Y ;
+  SITE unit ;
+  
+    PIN CLK
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER metal2 ;
+        RECT 3.3 9 5.3 11 ;
+    END
+  END CLK
+    PIN D
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER metal2 ;
+        RECT 11 9 13 11 ;
+    END
+  END D
+    PIN Q
+    DIRECTION OUTPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER metal2 ;
+        RECT 49.5 10.5 51.5 12.5 ;
+    END
+  END Q
+    PIN VDD
+    DIRECTION INPUT ;
+    USE POWER ;
+    PORT
+      LAYER metal1 ;
+        RECT -0.5 28.5 52.5 30.5 ;
+    END
+  END VDD
+    PIN VSS
+    DIRECTION INPUT ;
+    USE GROUND ;
+    PORT
+      LAYER metal1 ;
+        RECT -0.5 -0.5 52.5 1.5 ;
+    END
+  END VSS
+  OBS
+
+    LAYER metal1 ;
+      WIDTH 1.400 ;
+      PATH 1.800 22.600 1.800 25.800 ;
+
+      WIDTH 1.400 ;
+      PATH 50.300 22.600 50.300 25.800 ;
+      WIDTH 1.000 ;
+      PATH 1.800 3.800 1.800 21.800 ;
+      WIDTH 1.000 ;
+      PATH 5.800 18.800 1.800 18.800 ;
+      WIDTH 1.000 ;
+      PATH 5.300 13.000 1.800 13.000 ;
+      WIDTH 1.000 ;
+      PATH 5.800 6.800 1.800 6.800 ;
+      WIDTH 1.000 ;
+      PATH 8.300 25.800 8.300 16.200 ;
+      WIDTH 1.000 ;
+      PATH 14.800 6.800 8.300 6.800 ;
+      WIDTH 1.000 ;
+      PATH 8.300 3.600 8.300 9.500 7.800 9.500 7.800 16.200 31.300 16.200 ;
+      WIDTH 1.000 ;
+      PATH 16.300 21.800 16.300 18.800 22.300 18.800 ;
+      WIDTH 1.000 ;
+      PATH 26.800 19.200 25.000 19.200 25.000 21.300 24.300 21.300 24.300 21.800 ;
+      WIDTH 1.000 ;
+      PATH 38.800 19.200 32.800 19.200 32.800 21.800 ;
+      WIDTH 1.000 ;
+      PATH 41.300 25.800 41.300 3.700 ;
+      WIDTH 1.000 ;
+      PATH 45.300 8.800 41.300 8.800 ;
+      WIDTH 1.000 ;
+      PATH 36.800 14.000 41.300 14.000 ;
+      WIDTH 1.000 ;
+      PATH 45.300 17.200 41.300 17.200 ;
+      WIDTH 1.000 ;
+      PATH 20.300 6.800 26.800 6.800 ;
+      WIDTH 1.000 ;
+      PATH 24.300 6.800 24.300 3.700 ;
+      WIDTH 1.000 ;
+      PATH 32.800 3.800 32.800 6.800 38.800 6.800 ;
+      WIDTH 1.000 ;
+      PATH 44.300 3.800 44.300 6.300 48.000 6.300 48.000 19.400 44.200 19.400 44.200 21.800 ;
+      WIDTH 1.000 ;
+      PATH 50.800 3.300 50.800 26.000 ;
+      WIDTH 1.400 ;
+      PATH 7.800 22.600 7.800 25.800 ;
+      WIDTH 1.400 ;
+      PATH 16.300 22.600 16.300 25.800 ;
+      WIDTH 1.400 ;
+      PATH 24.300 22.600 24.300 25.800 ;
+      WIDTH 1.400 ;
+      PATH 32.800 22.600 32.800 25.800 ;
+      WIDTH 1.400 ;
+      PATH 40.800 22.600 40.800 25.800 ;
+      WIDTH 1.400 ;
+      PATH 44.300 22.600 44.300 25.800 ;
+      WIDTH 1.400 ;
+      PATH 50.300 22.600 50.300 25.800 ;
+
+      WIDTH 1.400 ;
+      PATH 4.800 3.800 4.800 1.500 ;
+      WIDTH 1.400 ;
+      PATH 11.300 3.800 11.300 1.500 ;
+      WIDTH 1.400 ;
+      PATH 21.300 3.800 21.300 1.500 ;
+      WIDTH 1.400 ;
+      PATH 27.800 3.800 27.800 1.500 ;
+      WIDTH 1.400 ;
+      PATH 37.800 3.800 37.800 1.500 ;
+      WIDTH 1.400 ;
+      PATH 47.300 3.800 47.300 1.500 ;
+      WIDTH 1.400 ;
+      PATH 4.800 21.800 4.800 28.500 ;
+      WIDTH 1.400 ;
+      PATH 11.300 21.800 11.300 28.500 ;
+      WIDTH 1.400 ;
+      PATH 21.300 21.800 21.300 28.500 ;
+      WIDTH 1.400 ;
+      PATH 27.800 21.800 27.800 28.500 ;
+      WIDTH 1.400 ;
+      PATH 37.800 21.800 37.800 28.500 ;
+      WIDTH 1.400 ;
+      PATH 47.300 21.800 47.300 28.500 ;
+
+      WIDTH 1.000 ;
+      PATH 10.300 13.000 34.000 13.000 ;
+      WIDTH 1.000 ;
+      PATH 22.300 10.000 16.800 10.000 16.800 4.300 ;
+
+    VIA 22.300 18.700  pcont ;
+    VIA 20.300 6.800  pcont ;
+    VIA 17.300 16.000  pcont ;
+    VIA 15.300 13.000  pcont ;
+    VIA 14.800 6.800  pcont ;
+    VIA 5.800 18.800  pcont ;
+    VIA 10.300 13.000  pcont ;
+    VIA 5.300 13.000  pcont ;
+    VIA 5.800 6.800  pcont ;
+    VIA 4.300 10.000  pcont ;
+    VIA 12.000 10.000  pcont ;
+    VIA 22.300 10.000  pcont ;
+    VIA 26.800 6.800  pcont ;
+    VIA 26.800 18.700  pcont ;
+    VIA 28.800 13.000  pcont ;
+    VIA 31.800 16.700  pcont ;
+    VIA 33.800 13.700  pcont ;
+    VIA 36.800 14.000  pcont ;
+    VIA 38.800 6.800  pcont ;
+    VIA 38.800 18.700  pcont ;
+    VIA 45.300 8.800  pcont ;
+    VIA 48.300 6.800  pcont ;
+    VIA 48.300 18.900  pcont ;
+    VIA 45.300 17.200  pcont ;
+    VIA 46.000 0.500  psubcont ;
+    VIA 27.700 0.500  psubcont ;
+    VIA 10.200 0.500  psubcont ;
+    VIA 27.700 29.500  nsubcont ;
+    VIA 10.200 29.500  nsubcont ;
+    VIA 46.000 29.500  nsubcont ;
+    VIA 11.300 3.800  dcont ;
+    VIA 16.300 3.800  dcont ;
+    VIA 21.300 3.800  dcont ;
+    VIA 24.300 3.800  dcont ;
+    VIA 27.800 3.800  dcont ;
+    VIA 32.800 3.800  dcont ;
+    VIA 37.800 3.800  dcont ;
+    VIA 40.800 3.800  dcont ;
+    VIA 44.300 3.800  dcont ;
+    VIA 47.300 3.800  dcont ;
+    VIA 50.300 3.800  dcont ;
+    VIA 7.800 3.800  dcont ;
+    VIA 4.800 3.800  dcont ;
+    VIA 1.800 3.800  dcont ;
+    VIA 1.800 25.800  dcont ;
+    VIA 1.800 23.800  dcont ;
+    VIA 1.800 21.800  dcont ;
+    VIA 4.800 21.800  dcont ;
+    VIA 4.800 23.800  dcont ;
+    VIA 4.800 25.800  dcont ;
+    VIA 7.800 25.800  dcont ;
+    VIA 7.800 23.800  dcont ;
+    VIA 7.800 21.800  dcont ;
+    VIA 11.300 21.800  dcont ;
+    VIA 11.300 23.800  dcont ;
+    VIA 11.300 25.800  dcont ;
+    VIA 16.300 25.800  dcont ;
+    VIA 16.300 23.800  dcont ;
+    VIA 16.300 21.800  dcont ;
+    VIA 21.300 21.800  dcont ;
+    VIA 21.300 23.800  dcont ;
+    VIA 21.300 25.800  dcont ;
+    VIA 24.300 25.800  dcont ;
+    VIA 24.300 23.800  dcont ;
+    VIA 24.300 21.800  dcont ;
+    VIA 27.800 21.800  dcont ;
+    VIA 27.800 23.800  dcont ;
+    VIA 27.800 25.800  dcont ;
+    VIA 32.800 25.800  dcont ;
+    VIA 32.800 23.800  dcont ;
+    VIA 32.800 21.800  dcont ;
+    VIA 37.800 21.800  dcont ;
+    VIA 37.800 23.800  dcont ;
+    VIA 37.800 25.800  dcont ;
+    VIA 40.800 25.800  dcont ;
+    VIA 40.800 23.800  dcont ;
+    VIA 40.800 21.800  dcont ;
+    VIA 44.300 25.800  dcont ;
+    VIA 44.300 23.800  dcont ;
+    VIA 44.300 21.800  dcont ;
+    VIA 47.300 21.800  dcont ;
+    VIA 47.300 23.800  dcont ;
+    VIA 47.300 25.800  dcont ;
+    VIA 50.300 25.800  dcont ;
+    VIA 50.300 23.800  dcont ;
+    VIA 50.300 21.800  dcont ;
+  END
+END DFFPOSX1
+
+MACRO INVX1
+  CLASS CORE ;
+  SOURCE USER ;
+  ORIGIN 0 0 ;
+  SIZE 6.500 BY 30.000 ;
+  SYMMETRY X Y ;
+  SITE unit ;
+  
+    PIN A
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER metal2 ;
+        RECT 1 14.5 3 16.5 ;
+    END
+  END A
+    PIN VDD
+    DIRECTION INPUT ;
+    USE POWER ;
+    PORT
+      LAYER metal1 ;
+        RECT -0.5 28.5 7 30.5 ;
+    END
+  END VDD
+    PIN VSS
+    DIRECTION INPUT ;
+    USE GROUND ;
+    PORT
+      LAYER metal1 ;
+        RECT -0.5 -0.5 7 1.5 ;
+    END
+  END VSS
+    PIN Y
+    DIRECTION OUTPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER metal2 ;
+        RECT 4 10.3 6 12.3 ;
+    END
+  END Y
+  OBS
+
+    LAYER metal1 ;
+
+      WIDTH 1.400 ;
+      PATH 1.800 21.300 1.800 28.500 ;
+      WIDTH 1.000 ;
+      PATH 1.800 1.000 1.800 3.800 ;
+
+      WIDTH 1.400 ;
+      PATH 4.800 21.300 4.800 24.500 ;
+      WIDTH 1.000 ;
+      PATH 4.800 20.500 4.800 3.800 ;
+
+    VIA 4.800 3.800  dcont ;
+    VIA 4.800 24.500  dcont ;
+    VIA 4.800 20.500  dcont ;
+    VIA 4.800 22.500  dcont ;
+    VIA 1.800 24.500  dcont ;
+    VIA 1.800 3.800  dcont ;
+    VIA 1.800 20.500  dcont ;
+    VIA 1.800 22.500  dcont ;
+    VIA 3.500 29.500  nsubcont ;
+    VIA 2.000 15.500  pcont ;
+    VIA 4.000 0.500  psubcont ;
+  END
+END INVX1
+
+MACRO NAND2X1
+  CLASS CORE ;
+  SOURCE USER ;
+  ORIGIN 0 0 ;
+  SIZE 9.500 BY 30.000 ;
+  SYMMETRY X Y ;
+  SITE unit ;
+ 
+    PIN A
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER metal2 ;
+        RECT 1 14.5 3 16.5 ;
+    END
+  END A
+    PIN B
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER metal2 ;
+        RECT 4 8.5 6 10.5 ;
+    END
+  END B
+    PIN VDD
+    DIRECTION INPUT ;
+    USE POWER ;
+    PORT
+      LAYER metal1 ;
+        RECT -0.5 28.5 10 30.5 ;
+    END
+  END VDD
+    PIN VSS
+    DIRECTION INPUT ;
+    USE GROUND ;
+    PORT
+      LAYER metal1 ;
+        RECT -0.5 -0.5 10 1.5 ;
+    END
+  END VSS
+    PIN Y
+    DIRECTION OUTPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER metal2 ;
+        RECT 7 13 9 15 ;
+    END
+  END Y
+  OBS
+
+    LAYER metal1 ;
+
+      WIDTH 1.400 ;
+      PATH 1.800 21.300 1.800 28.500 ;
+      WIDTH 1.000 ;
+      PATH 1.800 1.000 1.800 3.800 ;
+      WIDTH 1.400 ;
+      PATH 7.800 21.300 7.800 28.500 ;
+
+      WIDTH 1.400 ;
+      PATH 4.800 21.300 4.800 24.500 ;
+      WIDTH 1.000 ;
+      PATH 4.800 20.500 4.800 18.000 7.500 18.000 7.500 6.500 6.800 6.500 6.800 3.800 ;
+
+    VIA 1.800 22.500  dcont ;
+    VIA 1.800 20.500  dcont ;
+    VIA 1.800 3.800  dcont ;
+    VIA 1.800 24.500  dcont ;
+    VIA 4.800 22.500  dcont ;
+    VIA 4.800 20.500  dcont ;
+    VIA 4.800 24.500  dcont ;
+    VIA 6.800 3.800  dcont ;
+    VIA 7.800 24.500  dcont ;
+    VIA 7.800 22.500  dcont ;
+    VIA 7.800 20.500  dcont ;
+    VIA 5.500 29.500  nsubcont ;
+    VIA 5.000 9.500  pcont ;
+    VIA 2.000 15.500  pcont ;
+    VIA 5.000 0.500  psubcont ;
+  END
+END NAND2X1
+
+MACRO FILL
+  CLASS  CORE ;
+  FOREIGN FILL 0.000 0.000 ;
+  ORIGIN 0.000 0.000 ;
+  SIZE 1.600 BY 20.000 ;
+  SYMMETRY X Y ;
+  SITE core ;
+    PIN gnd
+    DIRECTION INPUT ;
+    USE GROUND ;
+    PORT
+      LAYER metal1 ;
+        RECT -0.4 -0.6 2 0.6 ;
+    END
+  END gnd
+    PIN vdd
+    DIRECTION INPUT ;
+    USE POWER ;
+    PORT
+      LAYER metal1 ;
+        RECT -0.4 19.4 2 20.6 ;
+    END
+  END vdd
+END FILL
+
+MACRO NOR2X1
+  CLASS CORE ;
+  ORIGIN 0 0 ;
+  SIZE 9.5 BY 30 ;
+  SYMMETRY X Y ;
+  SITE unit ;
+            PIN A
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER metal2 ;
+        RECT 6 18 9 21 ;
+    END
+  END A
+            PIN B
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER metal2 ;
+        RECT 2 6 5 9 ;
+    END
+  END B
+            PIN Y
+    DIRECTION OUTPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER metal2 ;
+        RECT 1 24 4 27 ;
+    END
+  END Y
+            PIN VDD
+    DIRECTION INPUT ;
+    USE POWER ;
+    PORT
+      LAYER metal1 ;
+        RECT -0.5 28.5 10 30.5 ;
+    END
+  END VDD
+            PIN VSS
+    DIRECTION INPUT ;
+    USE GROUND ;
+    PORT
+      LAYER metal1 ;
+        RECT -0.5 -0.5 10 1.5 ;
+    END
+  END VSS
+END NOR2X1
+
+MACRO TIEHI
+  CLASS CORE ;
+  ORIGIN 0 0 ;
+  SIZE 1.6 BY 30 ;
+  SYMMETRY X Y ;
+  SITE unit ;
+            PIN Y
+    DIRECTION OUTPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER metal2 ;
+        RECT -1 14 2 17 ;
+    END
+  END Y
+END TIEHI
+
+MACRO TIELO
+  CLASS CORE ;
+  ORIGIN 0 0 ;
+  SIZE 1.6 BY 30 ;
+  SYMMETRY X Y ;
+  SITE unit ;
+            PIN Y
+    DIRECTION OUTPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER metal2 ;
+        RECT -1 14 2 17 ;
+    END
+  END Y
+END TIELO
+
+MACRO dcont
+  CLASS CORE ;
+  OBS
+    LAYER metal1 ;
+      RECT -1.000 -1.000  1.000 1.000 ;
+  END
+END dcont
+
+MACRO nsubcont
+  CLASS CORE ;
+  OBS
+    LAYER metal1 ;
+      RECT -1.000 -1.000  1.000 1.000 ;
+  END
+END nsubcont
+
+MACRO pcont
+  CLASS CORE ;
+  OBS
+    LAYER metal1 ;
+      RECT -1.000 -1.000  1.000 1.000 ;
+  END
+END pcont
+
+MACRO psubcont
+  CLASS CORE ;
+  OBS
+    LAYER metal1 ;
+      RECT -1.000 -1.000  1.000 1.000 ;
+  END
+END psubcont
+
+END LIBRARY

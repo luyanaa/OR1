@@ -1,0 +1,13 @@
+# KLayout LEF/DEF layer map for OR1 (OpenRule1um) OR1
+# Format: <layer> <purpose>[,<purpose>...] <gds-layer> <gds-datatype>
+# GDS layer numbers follow the magic cifoutput section of
+#   libs.tech/magic/OR1.tech
+metal1  NET,SPNET,VIA,LEFPIN,PIN,LEFOBS   8 0
+metal2  NET,SPNET,VIA,LEFPIN,PIN,LEFOBS  10 0
+metal3  NET,SPNET,VIA,LEFPIN,PIN,LEFOBS  12 0
+via1    VIA,LEFPIN,PIN                    9 0
+via2    VIA,LEFPIN,PIN                   11 0
+
+NAME    metal1/LABEL,metal1/LEFPIN         8 0
+NAME    metal2/LABEL,metal2/LEFPIN        10 0
+NAME    metal3/LABEL,metal3/LEFPIN        12 0

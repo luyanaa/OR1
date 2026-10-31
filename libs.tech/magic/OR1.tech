@@ -1,0 +1,567 @@
+tech
+ format 32
+ OR1
+end
+
+version
+ version 2026a
+ description "OpenRule1um (OR1): 1um NDA-free CMOS, nwell, 1P3M, 3.3V"
+end
+
+#----------------------------------------------------------------------
+# OR1 magic techfile.  lambda = 0.5um (all rules below in lambda units;
+# 1 lambda = 0.5 um => scalefactor 50 centimicrons per lambda).
+# GDS layers (layer/dtype):
+#   NWL 1/0, NWL_dp 2/0, DIFF 3/0, POL 5/0, HPOL 6/0, CNT 7/0,
+#   ML1 8/0, VIA1 9/0, ML2 10/0, VIA2 11/0, ML3 12/0, TEXT 13/0,
+#   FRAME 14/0, RES 15/0, CAP 16/0, DIO 17/0, Parea 18/0, Narea 19/0,
+#   PAD 20/0, DM_* 101-106/0, DM_PSUB 120/0.
+#----------------------------------------------------------------------
+
+planes
+  well,w
+  select,s
+  active,a
+  contact,c
+  metal1,m1
+  via1,v1
+  metal2,m2
+  via2,v2
+  metal3,m3
+  comment
+end
+
+types
+  well  nwell,nw
+  well  pwell,pw
+  select  nselect,ns
+  select  pselect,ps
+  active  ntransistor,nfet
+  active  ptransistor,pfet
+  active  transistor,tran,fet
+  active  diffusion,diff
+  active  ndiffusion,ndif,ndiff,green
+  active  pdiffusion,pdif,pdiff,brown
+  active  ndcontact,ndc
+  active  pdcontact,pdc
+  active  psubstratepdiff,psd
+  active  nsubstratendiff,nsd
+  active  psubstratepcontact,psc
+  active  nsubstratencontact,nsc
+  active  polysilicon,poly,p
+  active  polycontact,pc
+  active  poly_resist,pres
+  active  rpoly,rp
+  active  hipoly,hpol
+  active  rndiffusion,rndiff,rnd
+  active  rpdiffusion,rpdiff,rpd
+  active  rmetal1,rm1
+  metal1  metal1,m1,blue
+  metal1  m2contact,m2c,via
+  metal2  metal2,m2,purple
+  metal2  m3contact,m3c
+  metal2  rmetal2,rm2
+  metal3  metal3,m3,cyan
+  metal3  rmetal3,rm3
+  contact cut
+  comment comment
+end
+
+contact
+  pc   poly   metal1
+  ndc  ndiff  metal1
+  pdc  pdiff  metal1
+  nsc  nsd    metal1
+  psc  psd    metal1
+  m2c  metal1 metal2
+  m3c  metal2 metal3
+  stackable pc m2c
+  stackable pdc m2c
+  stackable psc m2c
+  stackable ndc m2c
+  stackable nsc m2c
+  stackable m2c m3c
+end
+
+styles
+ styletype  mos
+  nwell  12
+  pwell  13
+  nselect 43
+  pselect 44
+  diff  25
+  ndiff  2
+  pdiff  4
+  nsd  3
+  psd  5
+  nfet  6
+  pfet  8
+  ndc  2
+  ndc  20
+  pdc  4
+  pdc  20
+  nsc  3
+  psc  5
+  poly  6
+  pc  6
+  pc  20
+  pres  54
+  rp  54
+  hpol  7
+  m1  34
+  m2c  34
+  m2c  55
+  m2  36
+  m3c  36
+  m3c  56
+  m3  35
+  comment 51
+end
+
+compose
+end
+
+connect
+  nwell,nsc/a  nwell,nsc/a
+  pwell,psc/a  pwell,psc/a
+  m1,ndc/m1,nsc/m1,pdc/m1,psc/m1,pc/m1,m2c/m1  m1,ndc/m1,nsc/m1,pdc/m1,psc/m1,pc/m1,m2c/m1
+  m2,m2c/m2,m3c/m2  m2,m2c/m2,m3c/m2
+  m3,m3c/m3  m3,m3c/m3
+  diff,ndiff,nsd,ndc/a,nsc/a,pdiff,psd,pdc/a,psc/a  diff,ndiff,nsd,ndc/a,nsc/a,pdiff,psd,pdc/a,psc/a
+  poly,nfet,pfet,pc/a,pres,rp,hpol  poly,nfet,pfet,pc/a,pres,rp,hpol
+  cut  poly,ndiff,pdiff,nsd,psd,m1,m2c/m1
+end
+
+cifinput
+
+style  lambda=0.50(p)
+ scalefactor  50
+
+ layer nwell CWN
+ labels CWN
+ calma CWN 1 *
+
+ layer nwell NWL_dp
+ calma NWL_dp 2 *
+
+ # Mask layers used by the derivations below must be declared first.
+ layer nselect CSN
+ calma CSN 19 *
+
+ layer pselect CSP
+ calma CSP 18 *
+
+ layer poly CPG
+ labels CPG
+ calma CPG 5 *
+
+ layer hpol CHP
+ calma CHP 6 *
+
+ layer pres CRE
+ calma CRE 15 *
+
+ layer rp CPG
+ and CRE
+ calma CPG 5 *
+
+ # diffusion not under poly or an implant (field/parasitic)
+ layer diff CAA
+ and-not CPG
+ and-not CSN
+ and-not CSP
+ labels CAA
+ calma CAA 3 *
+
+
+ # n-diffusion: n-select, outside nwell (p-substrate side)
+ layer ndiff CAA
+ and CSN
+ and-not CPG
+ labels CAA
+ calma CAA 3 *
+
+ # p-diffusion: p-select, inside nwell
+ layer pdiff CAA
+ and CSP
+ and-not CPG
+ labels CAA
+ calma CAA 3 *
+
+ # substrate taps
+ layer nsd CAA
+ and CSN
+ and-not CPG
+ calma CAA 3 *
+
+ layer psd CAA
+ and CSP
+ and-not CPG
+ calma CAA 3 *
+
+ # transistors: poly over select-covered active (CAA present under gate)
+ layer nfet CAA
+ and CSN
+ and CPG
+ and-not CSP
+ labels CAA
+ calma CAA 3 *
+
+ layer pfet CAA
+ and CSP
+ and CPG
+ and-not CSN
+ labels CAA
+ calma CAA 3 *
+
+ layer tran CAA
+ and CPG
+ and-not CSN
+ and-not CSP
+ calma CAA 3 *
+
+ layer pc CCP
+ calma CCP 7 *
+
+ layer ndc CCA
+ and CSN
+ calma CCA 7 *
+
+ layer pdc CCA
+ and CSP
+ calma CCA 7 *
+
+ layer nsc CCS
+ and CWN
+ calma CCA 7 *
+
+ layer psc CCS
+ and-not CWN
+ calma CCA 7 *
+
+ layer m1 CMF
+ labels CMF
+ calma CMF 8 *
+
+ layer m2c CV1
+ calma CV1 9 *
+
+ layer m2 CMS
+ labels CMS
+ calma CMS 10 *
+
+ layer m3c CV2
+ calma CV2 11 *
+
+ layer m3 CMT
+ labels CMT
+ calma CMT 12 *
+
+ layer comment CTXT
+ labels CTXT
+ calma CTXT 13 *
+
+ #------------------------------------------------------------------
+ # Marking / non-electrical layers that appear inside the drawn
+ # OpenRule1um library cells (dummy-metal markers, frame, resistor and
+ # capacitor TEG layers).  They carry no connectivity; mapping them to
+ # the "comment" type keeps GDS reads clean instead of failing with
+ # "Unknown layer/datatype in boundary".
+ #------------------------------------------------------------------
+ layer comment FRAME
+ calma FRAME 14 *
+ layer comment RESMARK
+ calma RESMARK 15 *
+ layer comment CAPMARK
+ calma CAPMARK 16 *
+ layer comment DIOMARK
+ calma DIOMARK 17 *
+ layer comment DM_101
+ calma DM_101 101 *
+ layer comment DM_Narea
+ calma DM_Narea 102 *
+ layer comment DM_CNT
+ calma DM_CNT 103 *
+ layer comment DM_dcn
+ calma DM_dcn 104 *
+ layer comment DM_pcn
+ calma DM_pcn 105 *
+ layer comment DM_106
+ calma DM_106 106 *
+ layer comment DM_PSUB
+ calma DM_PSUB 120 *
+
+end
+
+cifoutput
+
+style  lambda=0.50(p)
+ scalefactor  50
+
+ layer CWN nwell
+ labels nwell
+ calma 1 0
+
+ layer CAA diff,ndiff,nfet,nsd,ndc/a,pdiff,pfet,psd,pdc/a,nsc/a,psc/a
+ labels diff,ndiff,nsd,pdiff,psd
+ calma 3 0
+
+ layer CSN nselect,nsd,ndiff,nfet
+ calma 19 0
+
+ layer CSP pselect,psd,pdiff,pfet
+ calma 18 0
+
+ layer CPG poly,nfet,pfet,pc/a,pres,rp,hpol
+ labels poly
+ calma 5 0
+
+ layer CCA ndc,pdc,nsc,psc
+ calma 7 0
+
+ layer CMF m1
+ labels m1
+ calma 8 0
+
+ layer CV1 m2c
+ calma 9 0
+
+ layer CMS m2
+ labels m2
+ calma 10 0
+
+ layer CV2 m3c
+ calma 11 0
+
+ layer CMT m3
+ labels m3
+ calma 12 0
+
+end
+
+
+
+drc
+ # OR1 DRC: lambda = 0.5um.  Rule values below are in lambda.
+
+ width nwell 8 \
+  "NWL width < 4.0um"
+
+ spacing nwell nwell 8 touching_ok \
+  "NWL space < 4.0um"
+
+ width diff 2 \
+  "DIFF width < 1.0um"
+
+ spacing diff diff 3 touching_ok \
+  "DIFF space < 1.5um"
+
+ # NWL-Ndiff space < 3.0um
+ #
+ # The official rule is nwl.separation(ndiff.not_interacting(nwl), 3.0), i.e.
+ # only diffusion that does NOT interact with the n-well is measured.  Magic's
+ # DRC engine cannot express that: its spacing rules are single-plane, and the
+ # cross-plane variants are wrong here --
+ #   * touching_illegal also flags well taps (ndiff *inside* nwell) => ~34-54
+ #     false errors on every tap;
+ #   * touching_ok is rejected outright ("Spacing check with touching_ok must
+ #     have all types in one plane") and the rule is silently dropped.
+ # The check is therefore implemented in the KLayout deck only
+ # (libs.tech/klayout/drc/OR1.drc), which supports not_interacting.
+
+ width nselect 1 \
+  "Narea width < 0.5um"
+ width pselect 1 \
+  "Parea width < 0.5um"
+ spacing nselect nselect 1 touching_illegal \
+  "Narea space < 0.5um"
+ spacing pselect pselect 1 touching_illegal \
+  "Parea space < 0.5um"
+ spacing nselect pselect 1 touching_illegal \
+  "Narea-Parea space < 0.5um"
+
+ overhang nwell pdiff,psd,pdc/a,psc/a 4 \
+  "Pdiff enclosure in NWL < 2.0um"
+
+ overhang nselect ndiff,nsd,ndc/a,nsc/a,nfet 1 \
+  "DIFF enclosure in Narea < 0.5um"
+ overhang pselect pdiff,psd,pdc/a,psc/a,pfet 1 \
+  "DIFF enclosure in Parea < 0.5um"
+
+ width poly 2 \
+  "POL width < 1.0um"
+ spacing poly,pres,rp,hpol poly,pres,rp,hpol 2 touching_ok \
+  "POL space < 1.0um"
+ spacing poly diff 1 touching_ok \
+  "POL-DIFF space < 0.5um"
+
+ surround nfet,pfet poly,pres,rp 2 presence_all \
+  "POL gate extension < 1.0um"
+
+ width pc 2 \
+  "Contact width < 1.0um"
+ width ndc,pdc,nsc,psc 2 \
+  "Contact width < 1.0um"
+ spacing poly ndc,pdc,nsc,psc 1 touching_illegal \
+  "POL-contact space < 1.0um"
+
+ overhang poly pc 1 \
+  "POL enclose CNT < 0.5um"
+ overhang diff,ndiff,nsd ndc 1 \
+  "DIFF enclose CNT < 0.5um"
+ overhang diff,pdiff,psd pdc 1 \
+  "DIFF enclose CNT < 0.5um"
+
+ width m1,ndc/m1,pdc/m1,nsc/m1,psc/m1,pc/m1,m2c/m1 2 \
+  "ML1 width < 1.0um"
+ spacing m1,ndc/m1,pdc/m1,nsc/m1,psc/m1,pc/m1,m2c/m1 m1,ndc/m1,pdc/m1,nsc/m1,psc/m1,pc/m1,m2c/m1 2 touching_ok \
+  "ML1 space < 0.5um"
+ overhang m1 pc,ndc,pdc,nsc,psc 1 \
+  "ML1 enclose CNT < 0.5um"
+ overhang m1 m2c 1 \
+  "ML1 enclose VIA1 < 0.5um"
+
+ width m2c 2 \
+  "VIA1 width < 1.0um"
+ spacing m2c m2c 1 touching_illegal \
+  "VIA1 space < 0.5um"
+
+ width m2,m2c/m2,m3c/m2 2 \
+  "ML2 width < 1.0um"
+ spacing m2,m2c/m2,m3c/m2 m2,m2c/m2,m3c/m2 2 touching_ok \
+  "ML2 space < 0.5um"
+ overhang m2 m2c 1 \
+  "ML2 enclose VIA1 < 0.5um"
+ overhang m2 m3c 1 \
+  "ML2 enclose VIA2 < 0.5um"
+
+ width m3c 2 \
+  "VIA2 width < 1.0um"
+ spacing m3c m3c 1 touching_illegal \
+  "VIA2 space < 0.5um"
+
+ width m3,m3c/m3 2 \
+  "ML3 width < 1.0um"
+ spacing m3,m3c/m3 m3,m3c/m3 2 touching_ok \
+  "ML3 space < 0.5um"
+ overhang m3 m3c 1 \
+  "ML3 enclose VIA2 < 0.5um"
+
+end
+
+lef
+
+routing m1   metal1
+routing m2   metal2
+routing m3   metal3
+
+contact m2c via1 M2_M1
+contact m3c via2 M3_M2
+
+end
+
+extract
+ style OR1(or1)
+ cscale 1
+ lambda 50
+ step   100
+ sidehalo 8
+ planeorder well 0
+ planeorder select 1
+ planeorder active 2
+ planeorder contact 3
+ planeorder metal1 4
+ planeorder via1 5
+ planeorder metal2 6
+ planeorder via2 7
+ planeorder metal3 8
+ planeorder comment 9
+
+#----------------------------------------------------------------------
+# Parasitic RC model (units: milliohm per square; contact = milliohm
+# per contact; areacap = aF per lambda^2, i.e. 1 um^2 = 4 units).
+#
+# Resistances:
+#   poly            20 ohm/sq          (TEG sheet resistance)
+#   nwell           1.1 kohm/sq        (TEG)
+#   pact            42 ohm/sq          (TEG)
+#   nact            not measurable (diode TEG) -> same as pact, flagged
+#   metal1/2/3      Al (rho = 2.8e-8 ohm*m), graded stack:
+#                     M1 t = 0.55 um -> 0.051 ohm/sq = 51 milliohm/sq
+#                     M2 t = 0.65 um -> 0.043 ohm/sq = 43 milliohm/sq
+#                     M3 t = 0.90 um -> 0.031 ohm/sq = 31 milliohm/sq
+#                   (top metal is thickened for the power grid / EM)
+# Contacts/vias are the original PDK estimates.
+#----------------------------------------------------------------------
+ # p-substrate is the region outside n-well; it is tied to the ground net
+ # through the p-taps (psd/psc).
+ substrate *psd,psc,space/w,pwell well $GND -nwell
+
+ resist (ndiff,nsd,ndc,nsc)/active 42000
+ resist (pdiff,psd,pdc,psc)/active 42000
+ resist (nwell)/well 1100000
+ resist (pwell)/well 1100000
+ resist (poly,rp,pres,hpol,pc,nfet,pfet)/active 20000
+ resist (m1,ndc,nsc,pdc,psc,pc,m2c)/metal1  51
+ resist (m2,m2c,m3c)/metal2  43
+ resist (m3,m3c)/metal3  31
+
+ contact ndc 2 3000
+ contact pdc 2 3000
+ contact pc 2 3000
+ contact nsc 2 3000
+ contact psc 2 3000
+ contact m2c 2 1000
+ contact m3c 2 1000
+
+# OR1 devices: NMOS/PMOS models, bulk ties to $VDD/$GND nets.
+# NOTE: magic 8.3 takes no trailing tokens here.  The former
+#   "... nwell $VDD 52 181" / "... $GND 55 182"
+# form crashed resistance extraction (segfault in extresist).
+ device mosfet pfet pfet pdiff,psd,pdc,psc nwell
+ device mosfet nfet nfet ndiff,nsd,ndc,nsc pwell,space/w
+
+ fetresis  pfet linear		20000
+ fetresis  pfet saturation	20000
+ fetresis  nfet linear		8000
+ fetresis  nfet saturation	8000
+
+ device resistor None rpoly  poly,pc
+ device resistor None rndiff ndiff,ndc
+ device resistor None rpdiff pdiff,pdc
+ device resistor None rmetal1 *metal1
+ device resistor None rmetal2 *metal2
+ device resistor None rmetal3 *metal3
+
+# Parasitic capacitances, in aF per lambda^2 (= 250 x fF/um^2).
+# Interconnect values are estimated from a 1 um SiO2 interlevel dielectric,
+# eps_r = 3.9:  C = 3.45e-11 / t[m]  ->  0.035 fF/um^2 at t = 1 um.
+#   metal1/2/3 : 0.035 fF/um^2  (= 9 aF/lambda^2)
+#   poly       : 0.060 fF/um^2  (= 15)
+#   nwell      : 0.030 fF/um^2  (= 8)
+# The TEG values (poly-metal 3.06 fF/um^2, nMOS 5.42/3.82, pMOS 5.34/3.54)
+# describe gate-oxide capacitors and are carried by the device models, not
+# by the interconnect extractor, to avoid double counting.
+# Diffusions are also handled by the device models -> 0 here.
+ areacap nwell 8
+ areacap poly 15
+ areacap ndiff 0
+ areacap pdiff 0
+ areacap nsd 0
+ areacap psd 0
+ areacap m1 9
+ areacap m2 9
+ areacap m3 9
+
+end
+
+wiring
+ contact	pdc	2	metal1	0	pdiff	0
+ contact	ndc	2	metal1	0	ndiff	0
+ contact	pc	2	metal1	0	poly	0
+ contact	m2c	2	metal1	0	metal2	0
+ contact	m3c	2	metal2	0	metal3 0
+end
+
+
+

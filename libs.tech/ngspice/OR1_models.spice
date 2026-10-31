@@ -1,0 +1,24 @@
+* OR1 (OpenRule1um) ngspice device models
+* NOTE: tentative virtual parameters pending foundry characterization.
+* Process: 1um nwell CMOS, Lmin=1um, VDD=3.3V.
+
+.model NMOS NMOS (LEVEL=1
++ VTO=0.7 KP=110U GAMMA=0.4 LAMBDA=0.04 PHI=0.7
++ TOX=25N NSUB=1E16 LD=0.08U UO=550
++ CJ=4E-4 MJ=0.5 CJSW=1E-9 MJSW=0.33 PB=0.9
++ CGSO=3E-10 CGDO=3E-10 CGBO=1E-10
++ RSH=30 XJ=0.3U)
+
+.model PMOS PMOS (LEVEL=1
++ VTO=-0.9 KP=40U GAMMA=0.55 LAMBDA=0.06 PHI=0.7
++ TOX=25N NSUB=6E15 LD=0.08U UO=200
++ CJ=8E-4 MJ=0.5 CJSW=2E-10 MJSW=0.33 PB=0.9
++ CGSO=3E-10 CGDO=3E-10 CGBO=1E-10
++ RSH=80 XJ=0.3U)
+
+* Poly resistor (sheet rho ~20 ohm/sq in HPOL/RES region)
+.model rp R (RSH=20)
+
+* Diodes (parasitic junctions)
+.model DIO_N D (IS=1E-15 N=1 CJ=4E-4 MJSW=0.33 PB=0.9)
+.model DIO_P D (IS=1E-15 N=1 CJ=8E-4 MJSW=0.33 PB=0.9)

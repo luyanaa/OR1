@@ -1,0 +1,36 @@
+#-----------------------------------------------------------------------------
+# xschem configuration for the OR1 (OpenRule1um) PDK
+#
+# Usage:
+#   OR1_ROOT=/path/to/OR1PDK/OR1 xschem -rcfile $OR1_ROOT/libs.tech/xschem/xschemrc
+#
+# or copy this file to the project directory as `xschemrc`.
+#-----------------------------------------------------------------------------
+
+if {[info exists env(OR1_ROOT)]} {
+    set OR1_ROOT $env(OR1_ROOT)
+} else {
+    set OR1_ROOT [file normalize [file join [file dirname [info script]] ../..]]
+}
+
+# OR1 device symbols (converted from the OpenRule1um LTspice OR1LIB library)
+lappend XSCHEM_LIBRARY_PATH $OR1_ROOT/libs.tech/xschem/symbols
+
+# standard xschem symbols (supplies, sources, pins...)
+if {[info exists env(XSCHEM_SHAREDIR)]} {
+    lappend XSCHEM_LIBRARY_PATH $env(XSCHEM_SHAREDIR)/xschem_library
+}
+lappend XSCHEM_LIBRARY_PATH /usr/share/xschem/xschem_library
+
+# Netlisting
+set netlist_format spice
+set spice_netlist_dir ""
+set lvs_netlist 0
+
+# OR1 device models: add
+#     .include $OR1_ROOT/libs.tech/ngspice/OR1_models.spice
+# to every testbench (a `code` block in the schematic does the same job).
+set OR1_MODELS $OR1_ROOT/libs.tech/ngspice/OR1_models.spice
+
+puts "OR1 xschem: symbols  $OR1_ROOT/libs.tech/xschem/symbols"
+puts "OR1 xschem: models   $OR1_MODELS"

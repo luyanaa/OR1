@@ -1,0 +1,27 @@
+magic
+tech OR1
+<< metal1 >>
+rect 0 56 19 60
+rect 0 -1 19 3
+<< metal2 >>
+rect 14 33 18 37
+rect 2 33 6 37
+rect 8 16 12 20
+<< labels >>
+rlabel metal1 s 0 56 19 60 6 VDD
+port 1 nsew power input
+rlabel metal1 s 0 -1 19 3 6 VSS
+port 2 nsew ground input
+rlabel metal2 s 2 33 6 37 6 A
+port 3 nsew signal input
+rlabel metal2 s 8 16 12 20 6 B
+port 4 nsew signal input
+rlabel metal2 s 14 33 18 37 6 Y
+port 5 nsew signal output
+<< properties >>
+string FIXED_BBOX 0 0 19 60
+string LEFclass CORE
+string LEFsite unit
+string LEFsymmetry X Y
+string LEFview TRUE
+<< end >>

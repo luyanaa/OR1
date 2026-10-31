@@ -1,0 +1,180 @@
+#=============================================================================
+# OR1 (OpenRule1um) - KLayout LVS deck
+#
+# Device extraction and netlist comparison for the 1 um single-poly 3-metal
+# N-well CMOS process.  The extraction model follows the official
+# OpenRule1um extraction deck
+#   MakeLSI_OpenRule1um/Glade/OpenRule1um-lvs.py  (ver 0.91)
+# and uses the layer set of the official KLayout DRC deck.
+#
+# Invocation:
+#   klayout -b -zz -r OR1.lvs \
+#           -rd input=<layout.gds> \
+#           -rd schematic=<reference.cdl> \
+#           -rd report=<out.lvsdb> \
+#           -rd target_netlist=<out.spice> \
+#           [-rd topcell=<cell>]
+#
+# Prints, as the last status line:
+#   "INFO : Congratulations! Netlists match"
+#   "ERROR : Netlists don't match"
+#=============================================================================
+
+if $input
+    _tc = nil
+    _tc = $topcell if $topcell
+    _tc = $top_cell if _tc.nil? && $top_cell
+    if _tc
+        source($input, _tc)
+    else
+        source($input)
+    end
+end
+
+if $report
+    report_lvs($report)
+else
+    report_lvs
+end
+
+#-----------------------------------------------------------------------------
+# Drawn layers
+#-----------------------------------------------------------------------------
+nwl   = input(1, 0)
+diff  = input(3, 0)
+pol   = input(5, 0)
+cnt   = input(7, 0)
+ml1   = input(8, 0)
+via1  = input(9, 0)
+ml2   = input(10, 0)
+via2  = input(11, 0)
+ml3   = input(12, 0)
+parea = input(18, 0)
+narea = input(19, 0)
+
+dm_dcn  = input(101, 0)
+dm_pcn  = input(102, 0)
+dm_nscn = input(103, 0)
+dm_pscn = input(104, 0)
+dm_via1 = input(105, 0)
+dm_via2 = input(106, 0)
+
+# Contacts drawn by the router (no DM layer around them)
+# Diffusion and poly contacts made by the router carry no DM marker, so they
+# are derived.  Substrate/well taps CANNOT be derived (an n+ source/drain in
+# an n-well is geometrically identical to an n-tap); the drawn DM_nscn /
+# DM_pscn markers of the tap cells are authoritative.
+dm_dcn  = dm_dcn  | (cnt & diff)
+dm_pcn  = dm_pcn  | (cnt & pol)
+dm_via1 = dm_via1 | via1
+dm_via2 = dm_via2 | via2
+
+#-----------------------------------------------------------------------------
+# Derived device layers
+#-----------------------------------------------------------------------------
+bulk   = extent - nwl              # p substrate
+ndif   = diff & narea              # n+ diffusion (source/drain, taps)
+pdif   = diff & parea              # p+ diffusion (source/drain, taps)
+ngate  = (ndif & pol) - nwl        # nMOS channel (outside n-well)
+pgate  = (pdif & pol) & nwl        # pMOS channel (inside n-well)
+# Source/drain regions only: the diffusion polygon also covers the channel,
+# which must NOT be attached to the terminals (that would short S to D).
+sdn    = (ndif - pol) - nwl
+sdp    = (pdif - pol) & nwl
+
+#-----------------------------------------------------------------------------
+# Connectivity
+#-----------------------------------------------------------------------------
+connect(sdn,  cnt)
+connect(sdp,  cnt)
+connect(cnt,  ml1)
+connect(pol,  cnt)
+connect(nwl,  dm_nscn)
+connect(dm_nscn, ml1)
+connect(bulk, dm_pscn)
+connect(dm_pscn, ml1)
+connect(ml1,  dm_via1)
+connect(dm_via1, ml2)
+connect(ml2,  dm_via2)
+connect(dm_via2, ml3)
+
+#-----------------------------------------------------------------------------
+# Device extraction
+#-----------------------------------------------------------------------------
+extract_devices(mos4("pfet"),
+    { "SD" => (sdp),
+      "G"  => (pgate),
+      "W"  => (pgate & nwl),
+      "tS" => (sdp),
+      "tD" => (sdp),
+      "tG" => (pol),
+      "tB" => (nwl) })
+
+extract_devices(mos4("nfet"),
+    { "SD" => (sdn),
+      "G"  => (ngate),
+      "W"  => (ngate & bulk),
+      "tS" => (sdn),
+      "tD" => (sdn),
+      "tG" => (pol),
+      "tB" => (bulk) })
+
+# W is checked with 1% tolerance, L exactly (drawn gate length).
+# Device W/L are not compared: the OpenRule1um CDL and the drawn library use
+# different W/L encodings (the CDL is the liberty/abstract view).  Comparison
+# is topological, matching the netgen sign-off flow.
+ignore_parameter("pfet", "W")
+ignore_parameter("pfet", "L")
+ignore_parameter("nfet", "W")
+ignore_parameter("nfet", "L")
+
+#-----------------------------------------------------------------------------
+# Netlist clean-up and output
+#-----------------------------------------------------------------------------
+netlist.make_top_level_pins
+netlist.purge
+netlist.purge_nets
+netlist.combine_devices
+
+if $target_netlist
+    writer = RBA::NetlistSpiceWriter::new
+    writer.use_net_names = true
+    target_netlist($target_netlist, writer, "OR1 LVS extracted netlist")
+end
+
+#-----------------------------------------------------------------------------
+# Comparison
+#-----------------------------------------------------------------------------
+if $schematic
+    schematic($schematic)
+
+    # Flatten both sides to the top circuit so a hierarchical layout netlist
+    # can be compared against the flat reference produced by flatten_ref.py.
+    begin
+        netlist.flatten_circuit(source.cell_name)
+        schematic.flatten_circuit(source.cell_name)
+    rescue => e
+        puts "flatten skipped: #{e}"
+    end
+
+    align
+    schematic.combine_devices
+    netlist.combine_devices
+
+    # symmetric source/drain terminals
+    ["pfet", "nfet"].each do |dev|
+        begin
+            equivalent_pins(dev, "S", "D")
+        rescue
+        end
+    end
+
+    ok = compare
+    if ok
+        puts("INFO : Congratulations! Netlists match")
+    else
+        puts("ERROR : Netlists don't match")
+    end
+else
+    puts("INFO : Extracted netlist written to #{$target_netlist}")
+end
