@@ -17,7 +17,17 @@ import subprocess
 import sys
 import tempfile
 
-MODELS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "OR1_models.spice")
+HERE = os.path.dirname(os.path.abspath(__file__))
+# Model set: "virtual" (LEVEL=1, tentative) by default; set OR1_CHAR_MODELS=bsim3
+# to use the upstream BSIM3V3 cards shipped in upstream_bsim3/.
+MODEL_SET = os.environ.get("OR1_CHAR_MODELS", "virtual").lower()
+if MODEL_SET == "bsim3":
+    MODELS = [os.path.join(HERE, "upstream_bsim3", "BSIM3V3N.mod"),
+              os.path.join(HERE, "upstream_bsim3", "BSIM3V3P.mod")]
+    MODEL_MAP = {"nfet": "nch", "pfet": "pch"}
+else:
+    MODELS = [os.path.join(HERE, "OR1_models.spice")]
+    MODEL_MAP = {}
 
 VDD = 3.3
 CORNERS = ["tt"]
@@ -115,6 +125,7 @@ def netlist(devices, mapping):
         d = rev.get(d, d)
         g = rev.get(g, g)
         s = rev.get(s, s)
+        model = MODEL_MAP.get(model, model)
         out.append(f"M{i} {d} {g} {s} {b} {model} W={w}u L={l}u")
     return "\n".join(out)
 
@@ -122,13 +133,24 @@ def netlist(devices, mapping):
 def run_point(cell, devices, in_pin, other, out_pin, slew, load):
     """One rise+fall transient; returns dict with the four measurements."""
     spec = CELLS[cell]
+    # tphl = the input edge that makes the output fall, tplh = the one that
+    # makes it rise.  For an inverting cell that is input rise / input fall;
+    # for a non-inverting cell (BUFX2) it is the opposite.  Measuring a fixed
+    # polarity (rise->fall) on a buffer finds no edge and yields garbage.
+    inverting = spec["function"].lstrip().startswith("!")
+    trig_phl = "rise" if inverting else "fall"
+    trig_plh = "fall" if inverting else "rise"
+    meas_tphl = (".meas tran tphl trig v(%s) val=1.65 %s=1 "
+                 "targ v(%s) val=1.65 fall=1" % (in_pin, trig_phl, out_pin))
+    meas_tplh = (".meas tran tplh trig v(%s) val=1.65 %s=1 "
+                 "targ v(%s) val=1.65 rise=1" % (in_pin, trig_plh, out_pin))
     ports = spec["inputs"] + [out_pin]
     sources = [f"Vdd vdd 0 {VDD}",
                f"V{in_pin} {in_pin} 0 PULSE(0 {VDD} 2n {slew}n {slew}n 40n 80n)"]
     for name, val in other.items():
         sources.append(f"V{name} {name} 0 {VDD if val else 0}")
     deck = f"""OR1 characterisation {cell} {in_pin}
-.include "{MODELS}"
+{chr(10).join('.include "%s"' % m for m in MODELS)}
 Vdd vdd 0 {VDD}
 V{in_pin} {in_pin} 0 PULSE(0 {VDD} 2n {slew}n {slew}n 40n 80n)
 {chr(10).join(s for s in sources if not s.startswith('Vdd') and not s.startswith('V' + in_pin + ' '))}
@@ -138,8 +160,8 @@ Cout {out_pin} 0 {load}p
 .ends
 X1 {" ".join(ports)} vdd {cell}
 .tran 2p 80n
-.meas tran tphl trig v({in_pin}) val=1.65 rise=1 targ v({out_pin}) val=1.65 fall=1
-.meas tran tplh trig v({in_pin}) val=1.65 fall=1 targ v({out_pin}) val=1.65 rise=1
+{meas_tphl}
+{meas_tplh}
 .meas tran tfall trig v({out_pin}) val=2.64 fall=1 targ v({out_pin}) val=0.66 fall=1
 .meas tran trise trig v({out_pin}) val=0.66 rise=1 targ v({out_pin}) val=2.64 rise=1
 .end
@@ -190,11 +212,14 @@ def table(vals):
 
 def main():
     src, out_lib = sys.argv[1], sys.argv[2]
+    only = os.environ.get("OR1_CHAR_CELLS", "").split()
+    selected = [c for c in CELLS if not only or c in only]
     cells = {}
-    for cell in CELLS:
+    for cell in selected:
         cells[cell] = load_cell(os.path.join(src, cell + ".spice"))
     results = {}
-    for cell, spec in CELLS.items():
+    for cell in selected:
+        spec = CELLS[cell]
         _CURRENT_CELL[0] = cell
         print(f"characterising {cell} …", file=sys.stderr)
         results[cell] = char_cell(cell, cells[cell], spec)
@@ -214,7 +239,8 @@ def main():
         f.write('    variable_2 : total_output_net_capacitance ;\n')
         f.write(f'    index_1 ({table(SLEWS)}) ;\n')
         f.write(f'    index_2 ({table(LOADS)}) ;\n  }}\n')
-        for cell, spec in CELLS.items():
+        for cell in selected:
+            spec = CELLS[cell]
             r = results[cell]
             f.write(f'  cell ({cell}) {{\n    area : {spec["area"]} ;\n')
             for pin in spec["inputs"]:

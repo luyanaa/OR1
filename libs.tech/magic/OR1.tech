@@ -403,7 +403,7 @@ drc
  width ndc,pdc,nsc,psc 2 \
   "Contact width < 1.0um"
  spacing poly ndc,pdc,nsc,psc 1 touching_illegal \
-  "POL-contact space < 1.0um"
+  "POL-contact space < 0.5um"
 
  overhang poly pc 1 \
   "POL enclose CNT < 0.5um"
@@ -415,7 +415,7 @@ drc
  width m1,ndc/m1,pdc/m1,nsc/m1,psc/m1,pc/m1,m2c/m1 2 \
   "ML1 width < 1.0um"
  spacing m1,ndc/m1,pdc/m1,nsc/m1,psc/m1,pc/m1,m2c/m1 m1,ndc/m1,pdc/m1,nsc/m1,psc/m1,pc/m1,m2c/m1 2 touching_ok \
-  "ML1 space < 0.5um"
+  "ML1 space < 1.0um"
  overhang m1 pc,ndc,pdc,nsc,psc 1 \
   "ML1 enclose CNT < 0.5um"
  overhang m1 m2c 1 \
@@ -429,7 +429,7 @@ drc
  width m2,m2c/m2,m3c/m2 2 \
   "ML2 width < 1.0um"
  spacing m2,m2c/m2,m3c/m2 m2,m2c/m2,m3c/m2 2 touching_ok \
-  "ML2 space < 0.5um"
+  "ML2 space < 1.0um"
  overhang m2 m2c 1 \
   "ML2 enclose VIA1 < 0.5um"
  overhang m2 m3c 1 \
@@ -443,7 +443,7 @@ drc
  width m3,m3c/m3 2 \
   "ML3 width < 1.0um"
  spacing m3,m3c/m3 m3,m3c/m3 2 touching_ok \
-  "ML3 space < 0.5um"
+  "ML3 space < 1.0um"
  overhang m3 m3c 1 \
   "ML3 enclose VIA2 < 0.5um"
 

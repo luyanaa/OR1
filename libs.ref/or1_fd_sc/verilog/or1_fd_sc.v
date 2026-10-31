@@ -58,11 +58,14 @@ endmodule
 
 `timescale 1ns/10ps
 `celldefine
-module DFFPOSX1 (CLK, D, Q);
+module DFFPOSX1 (CLK, D, Q, QB);
 input  CLK ;
 input  D ;
 output Q ;
+output QB ;
 reg Q ;
+
+   assign QB = ~Q;
 
    always @(posedge CLK)
       Q <= D;

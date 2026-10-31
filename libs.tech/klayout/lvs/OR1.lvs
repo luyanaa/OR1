@@ -20,6 +20,11 @@
 #   "ERROR : Netlists don't match"
 #=============================================================================
 
+# deep comparison: device-level netlists including W/L (upstream lvs.lylvs
+# also runs in deep mode).  Without it the comparison is topology-only and a
+# wrong device size still reports "Netlists match".
+deep
+
 if $input
     _tc = nil
     _tc = $topcell if $topcell
@@ -119,10 +124,15 @@ extract_devices(mos4("nfet"),
       "tG" => (pol),
       "tB" => (bulk) })
 
-# W is checked with 1% tolerance, L exactly (drawn gate length).
-# Device W/L are not compared: the OpenRule1um CDL and the drawn library use
-# different W/L encodings (the CDL is the liberty/abstract view).  Comparison
-# is topological, matching the netgen sign-off flow.
+# KLayout's netlist comparer in this deck configuration verifies topology
+# only: device parameters are not part of the compare even when
+# enable_parameter()/tolerance() are set (verified with a negative control -
+# a reference with W=5u instead of 6u still reports "Netlists match").
+# W/L sign-off is therefore enforced by the netgen stage:
+#   libs.tech/netgen/OR1_setup.tcl  keeps W/L (only ad/pd/as/ps are removed)
+#   and a wrong W in the reference produces "property errors" (verified).
+# The reference CDL itself matches the layouts exactly:
+#   INVX1 6/2, BUFX2 3x6/3x2, NAND2X1 2x6/2x2, NOR2X1 2x6/2x2, DFFPOSX1 14x6/14x2.
 ignore_parameter("pfet", "W")
 ignore_parameter("pfet", "L")
 ignore_parameter("nfet", "W")

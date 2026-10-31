@@ -25,6 +25,11 @@ if [ -z "$MAGIC_BIN" ]; then
     MAGIC_BIN=$(command -v magic)
 fi
 
+# the wrapper runs magic from a private scratch dir, so relative input and
+# output paths must be resolved first
+case "$1" in /*) GDS=$1 ;; *) GDS=$PWD/$1 ;; esac
+case "$3" in /*) OUT=$3 ;; *) OUT=$PWD/$3 ;; esac
+
 WORK=$(mktemp -d "${TMPDIR:-/tmp}/or1pex.XXXXXX")
 cd "$WORK"
 trap 'cd /; rm -rf "$WORK"' EXIT INT TERM
@@ -33,10 +38,10 @@ trap 'cd /; rm -rf "$WORK"' EXIT INT TERM
 # (check feedback entries)"), so judge success by the netlist itself.
 set +e
 "$MAGIC_BIN" -dnull -noconsole -rcfile "$HERE/OR1.magicrc" \
-      "$HERE/OR1_pex.tcl" "$@"
+      "$HERE/OR1_pex.tcl" "$GDS" "$2" "$OUT"
 set -e
 
-if [ ! -s "$3" ]; then
+if [ ! -s "$OUT" ]; then
     echo "OR1 PEX: no netlist produced" >&2
     exit 1
 fi

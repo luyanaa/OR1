@@ -1,19 +1,82 @@
 magic
 tech OR1
-timestamp 1793409472
+timestamp 1622061726
+<< checkpaint >>
+rect -8 -8 26 68
+<< nwell >>
+rect 0 40 18 60
+<< nselect >>
+rect 3 53 15 59
+<< pselect >>
+rect 3 45 15 51
+<< ptransistor >>
+rect 8 46 10 50
+<< ndcontact >>
+rect 5 55 7 57
+rect 11 55 13 57
+<< pdcontact >>
+rect 5 47 7 49
+rect 11 47 13 49
+<< psubstratepdiff >>
+rect 4 49 8 50
+rect 4 47 5 49
+rect 7 47 8 49
+rect 4 46 8 47
+rect 10 49 14 50
+rect 10 47 11 49
+rect 13 47 14 49
+rect 10 46 14 47
+<< nsubstratendiff >>
+rect 4 57 14 58
+rect 4 55 5 57
+rect 7 55 11 57
+rect 13 55 14 57
+rect 4 54 14 55
+<< polysilicon >>
+rect 8 50 10 52
+rect 8 43 10 46
+rect 3 40 10 43
+rect 3 39 8 40
 << metal1 >>
-rect -1 27 5 56
+rect 0 58 18 60
+rect 4 57 14 58
+rect 4 55 5 57
+rect 7 55 11 57
+rect 13 55 14 57
+rect 4 53 14 55
+rect 4 49 8 53
+rect 4 47 5 49
+rect 7 47 8 49
+rect 4 46 8 47
+rect 10 49 14 50
+rect 10 47 11 49
+rect 13 47 14 49
+rect 10 46 14 47
+rect 3 20 7 39
+rect 3 18 4 20
+rect 6 18 7 20
+rect 3 2 7 18
+rect 0 0 18 2
+<< m2contact >>
+rect 11 47 13 49
+rect 4 18 6 20
 << metal2 >>
-rect -1 27 5 56
+rect 10 49 14 50
+rect 10 47 11 49
+rect 13 47 14 49
+rect 10 46 14 47
+rect 3 20 7 21
+rect 3 18 4 20
+rect 6 18 7 20
+rect 3 17 7 18
+<< comment >>
+rect 4 53 14 60
+rect 4 46 8 50
+rect 10 46 14 50
+rect 3 39 7 43
 << labels >>
-rlabel metal2 s -1 27 5 56 6 Y
-port 1 nsew signal output
-rlabel metal1 s -1 27 5 56 6 Y
-port 1 nsew signal output
-<< properties >>
-string FIXED_BBOX 0 0 3 60
-string LEFclass CORE
-string LEFsite unit
-string LEFsymmetry X Y
-string LEFview TRUE
+rlabel metal1 9 59 9 59 4 VDD
+rlabel metal1 9 1 9 1 4 VSS
+rlabel m2contact 12 48 12 48 4 Y
+rlabel m2contact 5 19 5 19 4 VSS
 << end >>

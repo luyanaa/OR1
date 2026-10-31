@@ -11,7 +11,7 @@ set ::env(SYNTH_MUX_MAP) ""
 
 # Placement site
 set ::env(PLACE_SITE) "unit"
-set ::env(PLACE_SITE_WIDTH) 1.6
+set ::env(PLACE_SITE_WIDTH) 0.5
 set ::env(PLACE_SITE_HEIGHT) 30.0
 
 # No welltap/endcap/decap/diode/antenna cells in this library; reuse FILL
@@ -25,7 +25,7 @@ set ::env(FAKEDIODE_CELL) ""
 set ::env(SYNTH_DRIVING_CELL) "INVX1"
 set ::env(SYNTH_DRIVING_CELL_PIN) "Y"
 set ::env(OUTPUT_CAP_LOAD) "50.0"
-set ::env(SYNTH_MIN_BUF_PORT) "BUFX2 A X"
+set ::env(SYNTH_MIN_BUF_PORT) "BUFX2 A Y"
 # No dedicated tie cells: use BUFX2 with constant input? librelane requires a cell
 # Use BUFX2 output for tiehi and tie through inverter for tielo is not ideal;
 # simplest: point both at BUFX2 and rely on netlist not needing tie cells.

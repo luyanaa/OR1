@@ -139,6 +139,11 @@ set ::env(MACRO_BLOCKAGES_LAYER) "metal1 metal2 metal3"
 #-----------------------------------------------------------------------------
 # KLayout DRC (generic runset contract: -rd input/topcell/report)
 set ::env(KLAYOUT_DRC_RUNSET) "$::env(PDK_ROOT)/$::env(PDK)/libs.tech/klayout/drc/OR1.drc"
+# A missing runset makes librelane's KLayout.DRC step skip silently, which
+# would turn "0 violations" into "check not run".  Fail loudly instead.
+if { ![file exists $::env(KLAYOUT_DRC_RUNSET)] } {
+	error "OR1: KLayout DRC runset not found: $::env(KLAYOUT_DRC_RUNSET)"
+}
 
 # OpenRCX extraction rules (generated from the OR1 parasitic RC model)
 if { ![info exists ::env(TECH_LEFS)] } {

@@ -141,6 +141,11 @@ area : 384;
     next_state : "D";
     clocked_on : "CLK";
   }
+  pin(QB)  {
+    direction : output;
+    function : "IQN";
+    max_capacitance : 0.25;
+  }
   pin(CLK)  {
     direction : input;
     max_transition : 2.0;
@@ -793,7 +798,7 @@ area : 96;
 
 cell (TIEHI) {
   cell_footprint : conb;
-  area : 1.6;
+  area : 270;
   cell_leakage_power : 0;
   pin(Y)  {
     direction : output;
@@ -803,7 +808,7 @@ cell (TIEHI) {
 
 cell (TIELO) {
   cell_footprint : conb;
-  area : 1.6;
+  area : 270;
   cell_leakage_power : 0;
   pin(Y)  {
     direction : output;

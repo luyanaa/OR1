@@ -266,18 +266,28 @@ MACRO TIEHI
   CLASS CORE ;
   SOURCE USER ;
   ORIGIN 0 0 ;
-  SIZE 1.600 BY 30.000 ;
+  SIZE 9.000 BY 30.000 ;
   SYMMETRY Y ;
   SITE unit ;
+  PIN VDD    DIRECTION INOUT ;
+    USE POWER ;
+    PORT
+      LAYER metal1 ;
+        RECT 0 29 9 30 ;
+    END
+  END VDD
+  PIN VSS    DIRECTION INOUT ;
+    USE GROUND ;
+    PORT
+      LAYER metal1 ;
+        RECT 0 0 9 1 ;
+    END
+  END VSS
   PIN Y    DIRECTION OUTPUT ;
     USE SIGNAL ;
     PORT
-      LAYER metal2 ;
-        RECT -0.5 13.5 2.5 28 ;
-    END
-    PORT
       LAYER metal1 ;
-        RECT -0.5 13.5 2.5 28 ;
+        RECT 5 23 7 25 ;
     END
   END Y
 END TIEHI
@@ -286,18 +296,28 @@ MACRO TIELO
   CLASS CORE ;
   SOURCE USER ;
   ORIGIN 0 0 ;
-  SIZE 1.600 BY 30.000 ;
+  SIZE 9.000 BY 30.000 ;
   SYMMETRY Y ;
   SITE unit ;
+  PIN VDD    DIRECTION INOUT ;
+    USE POWER ;
+    PORT
+      LAYER metal1 ;
+        RECT 0 29 9 30 ;
+    END
+  END VDD
+  PIN VSS    DIRECTION INOUT ;
+    USE GROUND ;
+    PORT
+      LAYER metal1 ;
+        RECT 0 0 9 1 ;
+    END
+  END VSS
   PIN Y    DIRECTION OUTPUT ;
     USE SIGNAL ;
     PORT
-      LAYER metal2 ;
-        RECT -0.5 13.5 2.5 28 ;
-    END
-    PORT
       LAYER metal1 ;
-        RECT -0.5 13.5 2.5 28 ;
+        RECT 5 5 7 7 ;
     END
   END Y
 END TIELO

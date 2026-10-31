@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------------
 # OR1 PDK — build artefacts, extracted data and editor/EDA leftovers
 # ---------------------------------------------------------------------------
-
+docs/
 # librelane / OpenLane runs and per-run state
 /runs/
 /**/runs/

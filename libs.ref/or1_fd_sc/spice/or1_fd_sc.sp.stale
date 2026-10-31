@@ -1,0 +1,96 @@
+* ---------------------------------------------------------------------------
+* WARNING - STALE REFERENCE NETLIST
+* Device sizes in this file do not match the shipped layout: e.g. BUFX2 has
+* 4 transistors here but 6 in the GDS, INVX1 pfet is w=4u l=0.4u here but
+* w=6u l=1.0u in the layout.  Do not use for LVS sign-off or simulation.
+* Regenerate from the GDS (magic extract) before enabling W/L comparison.
+* See OR1PDK/STATUS-2026-10-31-contract-conflicts.md.
+* ---------------------------------------------------------------------------
+
+.subckt BUFX2 vdd A Y gnd
+M0 vdd A a_2_6# vdd pfet w=4u l=0.4u
++ ad=0p pd=0u as=0p ps=0u 
+M1 Y a_2_6# vdd vdd pfet w=8u l=0.4u
++ ad=0p pd=0u as=0p ps=0u 
+M2 gnd A a_2_6# gnd nfet w=2u l=0.4u
++ ad=0p pd=0u as=0p ps=0u 
+M3 Y a_2_6# gnd gnd nfet w=4u l=0.4u
++ ad=0p pd=0u as=0p ps=0u 
+.ends BUFX2
+
+.subckt DFFPOSX1 vdd D Q CLK gnd
+M0 vdd CLK a_2_6# vdd pfet w=8u l=0.4u
++ ad=0p pd=0u as=0p ps=0u 
+M1 a_17_74# D vdd vdd pfet w=4u l=0.4u
++ ad=0p pd=0u as=0p ps=0u 
+M2 a_22_6# CLK a_17_74# vdd pfet w=4u l=0.4u
++ ad=0p pd=0u as=0p ps=0u 
+M3 a_31_74# a_2_6# a_22_6# vdd pfet w=4u l=0.4u
++ ad=0p pd=0u as=0p ps=0u 
+M4 vdd a_34_4# a_31_74# vdd pfet w=4u l=0.4u
++ ad=0p pd=0u as=0p ps=0u 
+M5 a_34_4# a_22_6# vdd vdd pfet w=4u l=0.4u
++ ad=0p pd=0u as=0p ps=0u 
+M6 a_61_74# a_34_4# vdd vdd pfet w=4u l=0.4u
++ ad=0p pd=0u as=0p ps=0u 
+M7 a_66_6# a_2_6# a_61_74# vdd pfet w=4u l=0.4u
++ ad=0p pd=0u as=0p ps=0u 
+M8 a_76_84# CLK a_66_6# vdd pfet w=2u l=0.4u
++ ad=0p pd=0u as=0p ps=0u 
+M9 vdd Q a_76_84# vdd pfet w=2u l=0.4u
++ ad=0p pd=0u as=0p ps=0u 
+M10 gnd CLK a_2_6# gnd nfet w=4u l=0.4u
++ ad=0p pd=0u as=0p ps=0u 
+M11 Q a_66_6# vdd vdd pfet w=8u l=0.4u
++ ad=0p pd=0u as=0p ps=0u 
+M12 a_17_6# D gnd gnd nfet w=2u l=0.4u
++ ad=0p pd=0u as=0p ps=0u 
+M13 a_22_6# a_2_6# a_17_6# gnd nfet w=2u l=0.4u
++ ad=0p pd=0u as=0p ps=0u 
+M14 a_31_6# CLK a_22_6# gnd nfet w=2u l=0.4u
++ ad=0p pd=0u as=0p ps=0u 
+M15 gnd a_34_4# a_31_6# gnd nfet w=2u l=0.4u
++ ad=0p pd=0u as=0p ps=0u 
+M16 a_34_4# a_22_6# gnd gnd nfet w=2u l=0.4u
++ ad=0p pd=0u as=0p ps=0u 
+M17 a_61_6# a_34_4# gnd gnd nfet w=2u l=0.4u
++ ad=0p pd=0u as=0p ps=0u 
+M18 a_66_6# CLK a_61_6# gnd nfet w=2u l=0.4u
++ ad=0p pd=0u as=0p ps=0u 
+M19 a_76_6# a_2_6# a_66_6# gnd nfet w=2u l=0.4u
++ ad=0p pd=0u as=0p ps=0u 
+M20 gnd Q a_76_6# gnd nfet w=2u l=0.4u
++ ad=0p pd=0u as=0p ps=0u 
+M21 Q a_66_6# gnd gnd nfet w=4u l=0.4u
++ ad=0p pd=0u as=0p ps=0u 
+.ends DFFPOSX1
+
+.subckt INVX1 vdd A Y gnd
+M0 Y A vdd vdd pfet w=4u l=0.4u
++ ad=0p pd=0u as=0p ps=0u 
+M1 Y A gnd gnd nfet w=2u l=0.4u
++ ad=0p pd=0u as=0p ps=0u 
+.ends INVX1
+
+.subckt NAND2X1 vdd Y A B gnd
+M0 Y A vdd vdd pfet w=4u l=0.4u
++ ad=0p pd=0u as=0p ps=0u 
+M1 vdd B Y vdd pfet w=4u l=0.4u
++ ad=0p pd=0u as=0p ps=0u 
+M2 a_9_6# A gnd gnd nfet w=4u l=0.4u
++ ad=0p pd=0u as=0p ps=0u 
+M3 Y B a_9_6# gnd nfet w=4u l=0.4u
++ ad=0p pd=0u as=0p ps=0u 
+.ends NAND2X1
+
+.subckt NOR2X1 vdd B Y A gnd
+M0 a_9_54# A vdd vdd pfet w=8u l=0.4u
++ ad=0p pd=0u as=0p ps=0u 
+M1 Y B a_9_54# vdd pfet w=8u l=0.4u
++ ad=0p pd=0u as=0p ps=0u 
+M2 Y A gnd gnd nfet w=2u l=0.4u
++ ad=0p pd=0u as=0p ps=0u 
+M3 gnd B Y gnd nfet w=2u l=0.4u
++ ad=0p pd=0u as=0p ps=0u 
+.ends NOR2X1
+
