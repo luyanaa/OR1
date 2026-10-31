@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <technology>
- <name>OpenRule1um</name>
+ <name>OR1</name>
  <description/>
  <group/>
  <dbu>0.001</dbu>
- <base-path/>
- <original-base-path>C:\Users\user\KLayout\salt\OpenRule1um\tech\tech</original-base-path>
- <layer-properties_file>OpenRule1um.lyp</layer-properties_file>
+ <base-path>/grid/OpenRule1um/OR1PDK/OR1/libs.tech/klayout/tech</base-path>
+ <original-base-path/>
+ <layer-properties_file>OR1.lyp</layer-properties_file>
+ <pcell-library>../pymacros/or1_pcells.py</pcell-library>
  <add-other-layers>true</add-other-layers>
  <reader-options>
   <gds2>
