@@ -1,0 +1,61 @@
+OR1 PDK — OpenRule1um 1 um CMOS PDK for OpenROAD-based flows
+Copyright 2026 the OR1 PDK contributors
+
+This repository is licensed under the Apache License, Version 2.0 (see
+LICENSE), except for the third-party material identified below, which keeps
+its original license.
+
+--------------------------------------------------------------------------
+1. OpenRule1um (mineda-support)
+   https://github.com/mineda-support/OpenRule1um
+   Copyright (c) S. Moriyama (Anagix Corporation) and contributors
+   Licensed under the Apache License, Version 2.0
+
+   Covers: the KLayout DRC and LVS decks derived from the upstream rule
+   scripts (libs.tech/klayout/drc, libs.tech/klayout/lvs), the device models
+   and measurement notes derived from the upstream PDK (libs.tech/ngspice,
+   docs/measure), and the PCell geometry re-implemented from the upstream
+   PCell set (libs.tech/klayout/pymacros/or1_pcells.py).
+
+2. OpenRule1um standard cell library / MakeLSI
+   https://github.com/mineda-support/OpenRule1um
+   Copyright (c) 2020 MakeLSI
+   Licensed under the MIT License:
+
+   Permission is hereby granted, free of charge, to any person obtaining a
+   copy of this software and associated documentation files (the
+   "Software"), to deal in the Software without restriction, including
+   without limitation the rights to use, copy, modify, merge, publish,
+   distribute, sublicense, and/or sell copies of the Software, and to permit
+   persons to whom the Software is furnished to do so, subject to the
+   following conditions:
+
+   The above copyright notice and this permission notice shall be included in
+   all copies or substantial portions of the Software.
+
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+   THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+   LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+   FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+   DEALINGS IN THE SOFTWARE.
+
+   Covers: the standard cells in libs.ref/or1_fd_sc (GDS, LEF, CDL, Liberty,
+   magic views), which are derived from OpenRule1um_StdCell.gds
+   (cells inv1/buf2/na21/nr21/dff1), rebuilt as described in the PDK
+   PROVENANCE document (duplicate shapes removed, TAP/FILL redrawn,
+   TIEHI/TIELO added, pin labels renamed, DFF cells widened and re-drawn).
+
+3. OpenRule1um process rule table
+   libs.doc/doc/OpenRule1um.xlsx, .pdf
+   Copyright the OpenRule1um process authors
+   Reproduced verbatim from the PDK documentation package for reference.
+
+--------------------------------------------------------------------------
+Everything else in this tree — the PDK packaging, libs.tech/librelane and
+libs.tech/openroad configuration, the RCX rules generator, the
+characterisation harness, the sign-off tooling and the tests — is original
+work for this PDK and is licensed under the Apache License, Version 2.0.
+
+SPDX-License-Identifier: Apache-2.0
