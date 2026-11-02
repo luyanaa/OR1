@@ -154,7 +154,10 @@ def main():
     run = os.path.realpath(run)
     m = read_metrics(run)
     commit = sh(["git", "-C", REPO, "rev-parse", "HEAD"])
-    dirty = sh(["git", "-C", REPO, "status", "--porcelain"]) or ""
+    # the record file itself is expected to differ while it is being written
+    dirty_lines = [l for l in (sh(["git", "-C", REPO, "status", "--porcelain"]) or "").splitlines()
+                   if "signoff.json" not in l]
+    dirty = "\n".join(dirty_lines)
 
     gds = os.path.join(run, "final", "gds", "counter.gds")
     checks = {
