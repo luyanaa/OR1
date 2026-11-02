@@ -1,6 +1,6 @@
 {
-  "generated_utc": "2026-11-02T08:13:21Z",
-  "pdk_commit": "962d69c1e1e99e08c576a7bfb48d0d7ef817758a",
+  "generated_utc": "2026-11-02T08:28:29Z",
+  "pdk_commit": "1058b4a349de8515d588dff8f9aad9569de83c1f",
   "drc": {
     "exit": 0,
     "cells": {
@@ -97,6 +97,11 @@
         "note": "R compared by netgen"
       },
       {
+        "check": "T_MOSCAP",
+        "result": "match",
+        "note": "R compared by netgen"
+      },
+      {
         "check": "T_RES-R90",
         "result": "MISMATCH",
         "note": "negative control: wrong R must MISMATCH"
@@ -105,6 +110,11 @@
         "check": "T_DIODE-rev",
         "result": "MISMATCH",
         "note": "negative control: reversed diode must MISMATCH"
+      },
+      {
+        "check": "T_MOSCAP-C4",
+        "result": "MISMATCH",
+        "note": "negative control: wrong C must MISMATCH"
       },
       {
         "check": "T_RESARR",
