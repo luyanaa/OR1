@@ -1,4 +1,10 @@
 # ---------------------------------------------------------------------------
+# Source: original implementation for the OR1 PDK.  The device contract
+#   (parameters, rules) is ported from OpenRule1um_v2 pcells_v2.lym v2.99,
+#   (c) S. Moriyama / Anagix Corporation,
+#   https://github.com/mineda-support/OpenRule1um  tech/tech/macros/pcells_v2.lym
+#   (Apache-2.0); the geometry is re-implemented here on the Python PCell API.
+# License: Apache-2.0 (see OR1PDK/LICENSE and PROVENANCE.md).
 # OR1 (OpenRule1um) KLayout PCell library
 #
 # Load: put this file on KLayout's macro path (Macro Editor / pymacros), or
@@ -35,6 +41,12 @@ L_M3   = (12, 0)
 L_PA   = (18, 0)   # parea / pselect
 L_NA   = (19, 0)   # narea / nselect
 L_RES  = (15, 0)   # poly resistor marker
+L_CAP  = (16, 0)
+L_DIO  = (17, 0)
+L_DM_DCN  = (101, 0)  # contact-on-diffusion marker
+L_DM_PCN  = (102, 0)  # contact-on-poly marker
+L_DM_NSCN = (103, 0)  # n-substrate contact marker
+L_DM_PSCN = (104, 0)  # p-substrate contact marker
 
 GRID = 0.5         # layout grid (um)
 MIN_W = 1.0        # minimum drawn width
@@ -45,6 +57,15 @@ NW_ENCL = 2.0
 CNT = 1.0          # contact/via size
 CNT_ENC = 0.5      # enclosure around a contact/via
 CNT_PITCH = 2.0    # contact/via pitch (1.0 space)
+
+# Sheet resistances used only for the informational display text.
+#   RS_POLY is measured (MakeLSI/Measure/16PTS/R-C.md: 500 ohm over 45/1.8 um
+#   = 25 squares) and confirmed within 4 % by the 2022 22PTS TEG.
+#   RS_HPOL is a HYPOTHESIS: the 22HR80k TEG cannot be built at 20 ohm/sq and
+#   its ratio to the 400 ohm poly TEG implies ~3.2 kohm/sq against a design
+#   assumption of 4.0 kohm/sq.  It does not affect the drawn geometry.
+RS_POLY = 20.0
+RS_HPOL = 3200.0
 
 
 class _Base(pya.PCellDeclarationHelper):
@@ -252,10 +273,11 @@ class OR1Mos(_Base):
             sel = L_NA          # nMOS channel: n-select
         B(sel, -0.5, -0.5, X + 0.5, w + 0.5)
         # S/D contacts and metal1 islands (one contact per strip per 2 um)
-        cy = max(1.5, w / 2.0 - 0.5)
+        cy = w / 2.0
         for i in range(n + 1):
             xc = sd / 2.0 + i * (l + sd)
             B(L_CNT, xc - 0.5, cy - 0.5, xc + 0.5, cy + 0.5)
+            B(L_DM_DCN, xc - 1.0, cy - 1.0, xc + 1.0, cy + 1.0)
             B(L_M1, xc - 1.0, cy - 1.0, xc + 1.0, cy + 1.0)
             if self.with_via:
                 B(L_V1, xc - 0.5, cy - 0.5, xc + 0.5, cy + 0.5)
@@ -265,10 +287,11 @@ class OR1Mos(_Base):
             B(L_POLY, sd, w + 1.0, X - sd, w + 3.0)
             gx = X / 2.0
             B(L_CNT, gx - 0.5, w + 1.5, gx + 0.5, w + 2.5)
-            B(L_M1, gx - 1.0, w + 1.5, gx + 1.0, w + 2.5)
+            B(L_DM_PCN, gx - 1.0, w + 1.0, gx + 1.0, w + 3.0)
+            B(L_M1, gx - 1.0, w + 1.0, gx + 1.0, w + 3.0)
             if self.with_via:
                 B(L_V1, gx - 0.5, w + 1.5, gx + 0.5, w + 2.5)
-                B(L_M2, gx - 1.0, w + 1.5, gx + 1.0, w + 2.5)
+                B(L_M2, gx - 1.0, w + 1.0, gx + 1.0, w + 3.0)
         # body tap below the device
         if self.body_tie == "local":
             ty0 = -1.5 - 2.0
@@ -281,6 +304,8 @@ class OR1Mos(_Base):
             xc = CNT_ENC + 0.5
             while xc + 0.5 <= X - CNT_ENC:
                 B(L_CNT, xc - 0.5, ty0 + 0.5, xc + 0.5, ty0 + 1.5)
+                B(L_DM_NSCN if self.type == "p" else L_DM_PSCN,
+                  xc - 1.0, ty0, xc + 1.0, ty0 + 2.0)
                 B(L_M1, xc - 1.0, ty0 + 0.0, xc + 1.0, ty0 + 2.0)
                 xc += CNT_PITCH
 
@@ -321,7 +346,8 @@ class OR1MosGuard(OR1Mos):
         ox0, oy0 = ix0 - t, iy0 - t
         ox1, oy1 = ix1 + t, iy1 + t
         self._ring(L_DIFF, ox0, oy0, ox1, oy1, t)
-        sel = L_PA if self.type == "p" else L_NA
+        # pMOS sits in an n-well -> n+ guard; nMOS sits in the p-substrate -> p+ guard
+        sel = L_NA if self.type == "p" else L_PA
         self._ring(sel, ox0 - 0.5, oy0 - 0.5, ox1 + 0.5, oy1 + 0.5, t + 1.0)
         if self.type == "p":
             # one solid n-well covering device + ring, enclosing pdiff by 2 um
@@ -346,8 +372,13 @@ class OR1Res(_Base):
         self.param("hr", self.TypeBoolean, "High-res poly (HR_poly)", default=False)
 
     def display_text_impl(self):
-        return "OR1_RES(%s %.1fx%.1f, ~%.0f ohm)" % (
-            "HR" if self.hr else "poly", self.w, self.l, 20.0 * self.l / self.w)
+        # Rs_HPOL is a hypothesis derived from the 22PTS 22HR80k TEG (the
+        # ratio to the 400 ohm poly TEG gives ~3.2 kohm/sq against a design
+        # assumption of 4.0 kohm/sq); see
+        # OR1PDK/docs/measure/2026-11-01-round4-traceability-and-hpol.md.
+        rs = RS_HPOL if self.hr else RS_POLY
+        return "OR1_RES(%s %.1fx%.1f, ~%.3g ohm)" % (
+            "HR" if self.hr else "poly", self.w, self.l, rs * self.l / self.w)
 
     def coerce_parameters_impl(self):
         self.w = max(2.0, self._snap(self.w))   # contact head needs 2 um
@@ -477,6 +508,9 @@ class OR1MosCap(_Base):
         x0 = (W - L) / 2.0
         self._box(L_DIFF, 0.0, 0.0, W, H)
         self._box(L_NA, -0.5, -0.5, W + 0.5, H + 0.5)
+        # CAP marker: lets the LVS deck extract the structure as a capacitor
+        # and not as an nMOS transistor
+        self._box(L_CAP, 0.0, 0.0, W, H)
         # poly strip crossing the plate, 1 um overhang and a head above
         self._box(L_POLY, x0, -1.0, x0 + L, H + 3.0)
         self._box(L_CNT, x0 + L / 2.0 - 0.5, H + 1.5, x0 + L / 2.0 + 0.5, H + 2.5)
@@ -645,6 +679,7 @@ class OR1CapArray(OR1MosCap):
                 ox, oy = c * self.pitch_x, r * self.pitch_y
                 self._box(L_DIFF, ox, oy, ox + W, oy + H)
                 self._box(L_NA, ox - 0.5, oy - 0.5, ox + W + 0.5, oy + H + 0.5)
+                self._box(L_CAP, ox, oy, ox + W, oy + H)
                 self._box(L_POLY, ox + x0, oy - 1.0, ox + x0 + L, oy + H + 3.0)
                 self._box(L_CNT, ox + x0 + L / 2 - 0.5, oy + H + 1.5,
                           ox + x0 + L / 2 + 0.5, oy + H + 2.5)

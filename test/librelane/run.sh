@@ -9,7 +9,7 @@ here="$(cd "$(dirname "$0")" && pwd)"
 pdk_root="${1:-$(cd "$here/../../../.." && pwd)}"
 cd "$here"
 
-exec librelane --manual-pdk --pdk or1 --pdk-root "$pdk_root" \
+exec librelane --manual-pdk --pdk OR1 --pdk-root "$pdk_root" \
     --skip OpenROAD.CheckAntennas-1 \
     --skip OpenROAD.FillInsertion \
     --skip KLayout.XOR \

@@ -122,8 +122,10 @@ compose
 end
 
 connect
-  nwell,nsc/a  nwell,nsc/a
-  pwell,psc/a  pwell,psc/a
+  # 2026-11-01 round29: nsd/psd added so a well ties to the diffusion inside
+  # it (same as SCN3ME); without them the extracted well floats.
+  nwell,nsc/a,nsd  nwell,nsc/a,nsd
+  pwell,psc/a,psd  pwell,psc/a,psd
   m1,ndc/m1,nsc/m1,pdc/m1,psc/m1,pc/m1,m2c/m1  m1,ndc/m1,nsc/m1,pdc/m1,psc/m1,pc/m1,m2c/m1
   m2,m2c/m2,m3c/m2  m2,m2c/m2,m3c/m2
   m3,m3c/m3  m3,m3c/m3
@@ -220,7 +222,13 @@ style  lambda=0.50(p)
  and-not CSP
  calma CAA 3 *
 
- layer pc CCP
+ # 2026-11-01 round29: was "layer pc CCP" — magic keeps only ONE cif symbol
+ # per GDS layer and CCA wins layer 7, so CCP was never read and pc was
+ # empty (every poly contact/gate connection lost).  Derive pc from CCA,
+ # excluding both implants (mirror of ndc/pdc below).
+ layer pc CCA
+ and-not CSN
+ and-not CSP
  calma CCP 7 *
 
  layer ndc CCA
@@ -388,7 +396,10 @@ drc
  overhang pselect pdiff,psd,pdc/a,psc/a,pfet 1 \
   "DIFF enclosure in Parea < 0.5um"
 
- width poly 2 \
+ # 2026-11-01 round29: include pc/a so the poly contact does not cut the
+ # measured poly shape (SCN3ME: "width poly,fp,rp,pc/a,nfet,pfet,fet 2");
+ # otherwise the poly contact is a cut and the 0.5um slivers false-report.
+ width poly,pc/a 2 \
   "POL width < 1.0um"
  spacing poly,pres,rp,hpol poly,pres,rp,hpol 2 touching_ok \
   "POL space < 1.0um"
@@ -491,7 +502,31 @@ extract
 #                     M2 t = 0.65 um -> 0.043 ohm/sq = 43 milliohm/sq
 #                     M3 t = 0.90 um -> 0.031 ohm/sq = 31 milliohm/sq
 #                   (top metal is thickened for the power grid / EM)
-# Contacts/vias are the original PDK estimates.
+#                   DECIDED 2026-11-01: keep the aluminium calculation.  No
+#                   Kelvin metal TEG exists, so the sheet resistance is not
+#                   measurable; these numbers and the LEF RPERSQ
+#                   (0.0509/0.0431/0.0311) are the same calculation.
+# Contacts are the original PDK estimates (3 ohm); vias are 5 ohm
+# (decided 2026-11-01, see below).
+#
+# Provenance of the above (see docs/measure/):
+#   poly 20 / nwell 1.1k / pact 42 are *measured* values, not guesses:
+#     MakeLSI/Measure/16PTS/R-C.md (akita11, 2017-09-23) gives the TEG
+#     resistance together with the drawn L/W -
+#       poly  500 ohm  over 45/1.8 um  = 25.0 sq  -> 20.0 ohm/sq
+#       nwell 10  kohm over 45/4.8 um  =  9.375 sq -> 1.07 kohm/sq
+#       pact  625 ohm  over 45/3.0 um  = 15.0 sq  -> 41.7 ohm/sq
+#     The 2016 Nact TEG behaved as a diode and could not be measured.
+#   Independent 2022 confirmation (22PTS TEG_R.xlsx, geometry-free ratio):
+#     poly, P+ and N+ all within +-4 % of the 2017 numbers, so "nact = pact"
+#     is now experimentally supported rather than only flagged.
+#   HPOL: this file applies the POL value (20 ohm/sq) to hpol as well, but
+#     the 22PTS 22HR80k TEG cannot be built at 20 ohm/sq (4000 squares do
+#     not fit the 25..85 um HPOL body), and its ratio to the 400 ohm poly
+#     TEG implies Rs_HPOL ~ 3.2 kohm/sq (design assumption 4.0 kohm/sq).
+#     The HPOL value is therefore UNRESOLVED and deliberately left at the
+#     poly value until the TEG layout confirms the geometry - see
+#     docs/measure/2026-11-01-round4-traceability-and-hpol.md.
 #----------------------------------------------------------------------
  # p-substrate is the region outside n-well; it is tied to the ground net
  # through the p-taps (psd/psc).
@@ -511,8 +546,11 @@ extract
  contact pc 2 3000
  contact nsc 2 3000
  contact psc 2 3000
- contact m2c 2 1000
- contact m3c 2 1000
+ # via resistance: DECIDED 2026-11-01.  No usable measurement exists (the
+ # 22PTS via chain measured 8.3 ohm with an unknown number of vias), so the
+ # estimate is 5 ohm per via, for both via1 and via2.
+ contact m2c 2 5000
+ contact m3c 2 5000
 
 # OR1 devices: NMOS/PMOS models, bulk ties to $VDD/$GND nets.
 # NOTE: magic 8.3 takes no trailing tokens here.  The former

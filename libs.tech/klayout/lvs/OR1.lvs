@@ -1,4 +1,8 @@
 #=============================================================================
+# Source: original work for the OR1 PDK, following the extraction model of the
+#   official OpenRule1um LVS deck (MakeLSI_OpenRule1um/Glade/OpenRule1um-lvs.py,
+#   ver 0.91).  https://github.com/mineda-support/OpenRule1um
+# License: Apache-2.0 (see OR1PDK/LICENSE and PROVENANCE.md).
 # OR1 (OpenRule1um) - KLayout LVS deck
 #
 # Device extraction and netlist comparison for the 1 um single-poly 3-metal
@@ -56,6 +60,9 @@ via2  = input(11, 0)
 ml3   = input(12, 0)
 parea = input(18, 0)
 narea = input(19, 0)
+res   = input(15, 0)   # poly / diffusion resistor marker (rule table: RES)
+capm  = input(16, 0)   # MOS capacitor marker (CAP)
+diom  = input(17, 0)   # diode marker (DIO)
 
 dm_dcn  = input(101, 0)
 dm_pcn  = input(102, 0)
@@ -80,12 +87,18 @@ dm_via2 = dm_via2 | via2
 bulk   = extent - nwl              # p substrate
 ndif   = diff & narea              # n+ diffusion (source/drain, taps)
 pdif   = diff & parea              # p+ diffusion (source/drain, taps)
-ngate  = (ndif & pol) - nwl        # nMOS channel (outside n-well)
-pgate  = (pdif & pol) & nwl        # pMOS channel (inside n-well)
+# Conducting poly: the resistor body is NOT a conductor - it is turned into a
+# resistor device below (the same rule the upstream fabrication deck uses for
+# diffusion resistors: "diff_nores").
+polc   = pol - res
+# MOS channels: capacitor plates (CAP marker) and diode areas are not
+# transistors
+ngate  = ((ndif & polc) - nwl) - capm
+pgate  = (((pdif & polc) & nwl) - capm) - diom
 # Source/drain regions only: the diffusion polygon also covers the channel,
 # which must NOT be attached to the terminals (that would short S to D).
-sdn    = (ndif - pol) - nwl
-sdp    = (pdif - pol) & nwl
+sdn    = (((ndif - pol) - nwl) - res) - capm
+sdp    = ((((pdif - pol) & nwl) - res) - capm) - diom
 
 #-----------------------------------------------------------------------------
 # Connectivity
@@ -93,7 +106,7 @@ sdp    = (pdif - pol) & nwl
 connect(sdn,  cnt)
 connect(sdp,  cnt)
 connect(cnt,  ml1)
-connect(pol,  cnt)
+connect(polc, cnt)
 connect(nwl,  dm_nscn)
 connect(dm_nscn, ml1)
 connect(bulk, dm_pscn)
@@ -112,7 +125,7 @@ extract_devices(mos4("pfet"),
       "W"  => (pgate & nwl),
       "tS" => (sdp),
       "tD" => (sdp),
-      "tG" => (pol),
+      "tG" => (polc),
       "tB" => (nwl) })
 
 extract_devices(mos4("nfet"),
@@ -121,8 +134,64 @@ extract_devices(mos4("nfet"),
       "W"  => (ngate & bulk),
       "tS" => (sdn),
       "tD" => (sdn),
-      "tG" => (pol),
+      "tG" => (polc),
       "tB" => (bulk) })
+
+#-----------------------------------------------------------------------------
+# Passive device extraction
+#
+# Model: the resistor body is the drawn layer inside the RES marker, the
+# contact heads are the terminal layer (same construction as the upstream
+# fabrication deck, which uses nres.sized(0.5) inside "diff - nres" as the
+# terminal layer).  The body is excluded from the conducting layer above, so
+# the two heads become two different nets and the device is not shorted.
+#-----------------------------------------------------------------------------
+# Terminal layers are derived layers: they must be connected to the metal
+# explicitly, otherwise the device terminals end up on isolated nets and the
+# labeled layout nets stay floating (this is why the upstream deck has
+# connect(rn_layer, diff_nores) after building rn_layer).
+rterm_p  = cnt & pol & res
+rterm_n  = cnt & diff & narea & res
+rterm_pd = cnt & diff & parea & res
+connect(rterm_p,  ml1)
+connect(rterm_n,  ml1)
+connect(rterm_pd, ml1)
+
+rbody_p = (pol & res) - cnt
+extract_devices(resistor("POLYRES", 20.0),
+    { "R" => rbody_p, "C" => rterm_p, "tA" => rterm_p, "tB" => rterm_p })
+
+rbody_n = ((diff & narea) & res) - cnt
+extract_devices(resistor("NDIFFRES", 42.0),
+    { "R" => rbody_n, "C" => rterm_n, "tA" => rterm_n, "tB" => rterm_n })
+
+rbody_pd = ((diff & parea) & res) - cnt
+extract_devices(resistor("PDIFFRES", 42.0),
+    { "R" => rbody_pd, "C" => rterm_pd, "tA" => rterm_pd, "tB" => rterm_pd })
+
+# p+ / n-well diode: NOT extracted.
+#
+# The KLayout "diode" extractor needs P and N to be disjoint regions that
+# overlap at the junction.  A p+/n-well diode (anode inside the well, the well
+# is the cathode) has P contained in N, and the extractor then resolves *both*
+# terminals onto the anode net - verified on a minimal synthetic layout as well
+# as on the OR1_DIODE PCell:
+#
+#   D$1 A A PDIO        (cathode contact, well, n+ ring, none of them helped)
+#
+# Cutting the well out of the anode area removes the junction and no device is
+# produced at all.  Rather than ship a netlist with a silently shorted diode,
+# the device is left out until the cathode is drawn as a separate ring or a
+# dedicated device class is added.  See STATUS-2026-10-31-contract-conflicts.md
+# section 24.
+
+# MOS capacitor: poly plate over the diffusion plate inside the CAP marker.
+capp1 = pol & capm
+capp2 = diff & capm
+connect(capp1, cnt)
+connect(capp2, cnt)
+extract_devices(capacitor("MOSCAP", 1.0e-15),
+    { "P1" => capp1, "P2" => capp2 })
 
 # KLayout's netlist comparer in this deck configuration verifies topology
 # only: device parameters are not part of the compare even when
@@ -138,12 +207,44 @@ ignore_parameter("pfet", "L")
 ignore_parameter("nfet", "W")
 ignore_parameter("nfet", "L")
 
+# The passive devices are compared on presence and connectivity; their value
+# is reported in the extracted netlist (a resistor's R follows from the drawn
+# geometry, so it has to be checked against the user's own reference, e.g.
+# with netgen).  Symmetric resistor terminals are equivalent.
+["POLYRES", "NDIFFRES", "PDIFFRES", "PDIO", "MOSCAP"].each do |dev|
+    ["R", "L", "W", "A", "P", "C", "AREA", "PERIM"].each do |par|
+        begin
+            ignore_parameter(dev, par)
+        rescue
+        end
+    end
+end
+
 #-----------------------------------------------------------------------------
 # Netlist clean-up and output
 #-----------------------------------------------------------------------------
 netlist.make_top_level_pins
-netlist.purge
-netlist.purge_nets
+# make_top_level_pins does not promote the labeled nets of device-only
+# circuits (a resistor test cell ends up with 0 pins and no net names in the
+# SPICE output), so promote every named top-level net explicitly.
+begin
+    netlist.each_circuit do |c|
+        next unless c == netlist.top_circuit
+        c.each_net do |n|
+            next if n.name.nil? || n.name.empty?
+            next if n.pin_count > 0
+            begin
+                p = c.create_pin(n.name)
+                c.connect_pin(p.id, n)
+            rescue
+            end
+        end
+    end
+rescue
+end
+# NOTE: netlist.purge / purge_nets / simplify / flatten_circuit are
+# deliberately NOT called - in this KLayout version they empty the netlist
+# (0 circuits) which makes compare() trivially succeed.
 netlist.combine_devices
 
 if $target_netlist
@@ -160,12 +261,11 @@ if $schematic
 
     # Flatten both sides to the top circuit so a hierarchical layout netlist
     # can be compared against the flat reference produced by flatten_ref.py.
-    begin
-        netlist.flatten_circuit(source.cell_name)
-        schematic.flatten_circuit(source.cell_name)
-    rescue => e
-        puts "flatten skipped: #{e}"
-    end
+    # NOTE: netlist.flatten_circuit was removed here.  With the flat netlists
+    # produced by this deck it emptied the netlist (0 circuits), which made
+    # compare() trivially succeed - a reference with a missing transistor
+    # still reported "Netlists match".  Extraction is already flat, so no
+    # flattening is needed.
 
     align
     schematic.combine_devices
@@ -175,6 +275,14 @@ if $schematic
     ["pfet", "nfet"].each do |dev|
         begin
             equivalent_pins(dev, "S", "D")
+        rescue
+        end
+    end
+
+    # symmetric resistor terminals
+    ["POLYRES", "NDIFFRES", "PDIFFRES"].each do |dev|
+        begin
+            equivalent_pins(dev, "A", "B")
         rescue
         end
     end

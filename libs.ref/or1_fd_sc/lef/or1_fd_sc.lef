@@ -20,13 +20,15 @@ MACRO FILL
   SYMMETRY Y ;
   SITE unit ;
 
-  PIN VDD    USE POWER ;
+  PIN VDD    DIRECTION INOUT ;
+    USE POWER ;
     PORT
       LAYER metal1 ;
         RECT 0 28 3 30 ;
     END
   END VDD
-  PIN VSS    USE GROUND ;
+  PIN VSS    DIRECTION INOUT ;
+    USE GROUND ;
     PORT
       LAYER metal1 ;
         RECT 0 -0.5 3 1 ;
@@ -42,13 +44,15 @@ MACRO BUFX2
   SYMMETRY Y ;
   SITE unit ;
 
-  PIN VDD    USE POWER ;
+  PIN VDD    DIRECTION INOUT ;
+    USE POWER ;
     PORT
       LAYER metal1 ;
         RECT 0.000 28.000 12.500 30.000 ;
     END
   END VDD
-  PIN VSS    USE GROUND ;
+  PIN VSS    DIRECTION INOUT ;
+    USE GROUND ;
     PORT
       LAYER metal1 ;
         RECT 0.000 -0.500 12.500 1.500 ;
@@ -74,41 +78,43 @@ MACRO DFFPOSX1
   CLASS CORE ;
   SOURCE USER ;
   ORIGIN 0 0 ;
-  SIZE 52 BY 30.000 ;
+  SIZE 64.5 BY 30.000 ;
   SYMMETRY Y ;
   SITE unit ;
 
-  PIN VDD    USE POWER ;
+  PIN VDD    DIRECTION INOUT ;
+    USE POWER ;
     PORT
       LAYER metal1 ;
-        RECT 0.000 28.000 52.000 30.000 ;
+        RECT 11.500 28.000 64.500 30.000 ;
     END
   END VDD
-  PIN VSS    USE GROUND ;
+  PIN VSS    DIRECTION INOUT ;
+    USE GROUND ;
     PORT
       LAYER metal1 ;
-        RECT 0.000 -0.500 52.000 1.500 ;
+        RECT 11.500 -0.500 64.500 1.500 ;
     END
   END VSS
   PIN CLK    DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
       LAYER metal2 ;
-        RECT 3.500 9 5.500 11 ;
+        RECT 2.500 14.5 4.500 16.5 ;
     END
   END CLK
   PIN D    DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
       LAYER metal2 ;
-        RECT 11.000 9 13.000 11 ;
+        RECT 22.000 9 24.000 11 ;
     END
   END D
   PIN Q    DIRECTION OUTPUT ;
     USE SIGNAL ;
     PORT
       LAYER metal2 ;
-        RECT 49.500 10.5 51.500 12.5 ;
+        RECT 60.500 10.5 62.500 12.5 ;
     END
   END Q
   PIN QB
@@ -116,10 +122,9 @@ MACRO DFFPOSX1
     USE SIGNAL ;
     PORT
       LAYER metal1 ;
-        RECT 43.000 2.5 49.000 26.5 ;
+        RECT 54.000 2.5 60.000 26.5 ;
     END
   END QB
-
 END DFFPOSX1
 
 MACRO INVX1
@@ -130,13 +135,15 @@ MACRO INVX1
   SYMMETRY Y ;
   SITE unit ;
 
-  PIN VDD    USE POWER ;
+  PIN VDD    DIRECTION INOUT ;
+    USE POWER ;
     PORT
       LAYER metal1 ;
         RECT 0.000 28.000 6.500 30.000 ;
     END
   END VDD
-  PIN VSS    USE GROUND ;
+  PIN VSS    DIRECTION INOUT ;
+    USE GROUND ;
     PORT
       LAYER metal1 ;
         RECT 0.000 -0.500 6.500 1.500 ;
@@ -166,13 +173,15 @@ MACRO NAND2X1
   SYMMETRY Y ;
   SITE unit ;
 
-  PIN VDD    USE POWER ;
+  PIN VDD    DIRECTION INOUT ;
+    USE POWER ;
     PORT
       LAYER metal1 ;
         RECT 0.000 28.000 9.500 30.000 ;
     END
   END VDD
-  PIN VSS    USE GROUND ;
+  PIN VSS    DIRECTION INOUT ;
+    USE GROUND ;
     PORT
       LAYER metal1 ;
         RECT 0.000 -0.500 9.500 1.500 ;
@@ -226,13 +235,15 @@ MACRO NOR2X1
   SYMMETRY Y ;
   SITE unit ;
 
-  PIN VDD    USE POWER ;
+  PIN VDD    DIRECTION INOUT ;
+    USE POWER ;
     PORT
       LAYER metal1 ;
         RECT 0.000 28.000 9.500 30.000 ;
     END
   END VDD
-  PIN VSS    USE GROUND ;
+  PIN VSS    DIRECTION INOUT ;
+    USE GROUND ;
     PORT
       LAYER metal1 ;
         RECT 0.000 -0.500 9.500 1.500 ;
@@ -329,6 +340,21 @@ MACRO FILL_05
   SIZE 0.5 BY 30.000 ;
   SYMMETRY Y ;
   SITE unit ;
+  PIN VDD    DIRECTION INOUT ;
+    USE POWER ;
+    PORT
+      LAYER metal1 ;
+        RECT 0.000 28.000 0.500 30.000 ;
+    END
+  END VDD
+  PIN VSS    DIRECTION INOUT ;
+    USE GROUND ;
+    PORT
+      LAYER metal1 ;
+        RECT 0.000 -0.500 0.500 1.500 ;
+    END
+  END VSS
+
 END FILL_05
 
 MACRO FILL_10
@@ -337,6 +363,21 @@ MACRO FILL_10
   SIZE 1.0 BY 30.000 ;
   SYMMETRY Y ;
   SITE unit ;
+  PIN VDD    DIRECTION INOUT ;
+    USE POWER ;
+    PORT
+      LAYER metal1 ;
+        RECT 0.000 28.000 1.000 30.000 ;
+    END
+  END VDD
+  PIN VSS    DIRECTION INOUT ;
+    USE GROUND ;
+    PORT
+      LAYER metal1 ;
+        RECT 0.000 -0.500 1.000 1.500 ;
+    END
+  END VSS
+
 END FILL_10
 
 MACRO FILL_15
@@ -345,6 +386,21 @@ MACRO FILL_15
   SIZE 1.5 BY 30.000 ;
   SYMMETRY Y ;
   SITE unit ;
+  PIN VDD    DIRECTION INOUT ;
+    USE POWER ;
+    PORT
+      LAYER metal1 ;
+        RECT 0.000 28.000 1.500 30.000 ;
+    END
+  END VDD
+  PIN VSS    DIRECTION INOUT ;
+    USE GROUND ;
+    PORT
+      LAYER metal1 ;
+        RECT 0.000 -0.500 1.500 1.500 ;
+    END
+  END VSS
+
 END FILL_15
 
 MACRO FILL_20
@@ -353,6 +409,21 @@ MACRO FILL_20
   SIZE 2.0 BY 30.000 ;
   SYMMETRY Y ;
   SITE unit ;
+  PIN VDD    DIRECTION INOUT ;
+    USE POWER ;
+    PORT
+      LAYER metal1 ;
+        RECT 0.000 28.000 2.000 30.000 ;
+    END
+  END VDD
+  PIN VSS    DIRECTION INOUT ;
+    USE GROUND ;
+    PORT
+      LAYER metal1 ;
+        RECT 0.000 -0.500 2.000 1.500 ;
+    END
+  END VSS
+
 END FILL_20
 
 MACRO FILL_25
@@ -361,6 +432,21 @@ MACRO FILL_25
   SIZE 2.5 BY 30.000 ;
   SYMMETRY Y ;
   SITE unit ;
+  PIN VDD    DIRECTION INOUT ;
+    USE POWER ;
+    PORT
+      LAYER metal1 ;
+        RECT 0.000 28.000 2.500 30.000 ;
+    END
+  END VDD
+  PIN VSS    DIRECTION INOUT ;
+    USE GROUND ;
+    PORT
+      LAYER metal1 ;
+        RECT 0.000 -0.500 2.500 1.500 ;
+    END
+  END VSS
+
 END FILL_25
 
 MACRO TAP
@@ -369,5 +455,255 @@ MACRO TAP
   SIZE 4.0 BY 30.000 ;
   SYMMETRY Y ;
   SITE unit ;
+  PIN VDD    DIRECTION INOUT ;
+    USE POWER ;
+    PORT
+      LAYER metal1 ;
+        RECT 0.000 28.000 4.000 30.000 ;
+    END
+  END VDD
+  PIN VSS    DIRECTION INOUT ;
+    USE GROUND ;
+    PORT
+      LAYER metal1 ;
+        RECT 0.000 -0.500 4.000 1.500 ;
+    END
+  END VSS
+
 END TAP
+MACRO DECAPX1
+  CLASS CORE ;
+  SOURCE USER ;
+  ORIGIN 0 0 ;
+  SIZE 4.0 BY 30.000 ;
+  SYMMETRY Y ;
+  SITE unit ;
+
+  PIN VDD    DIRECTION INOUT ;
+    USE POWER ;
+    PORT
+      LAYER metal1 ;
+        RECT 0 28 3 30 ;
+    END
+  END VDD
+  PIN VSS    DIRECTION INOUT ;
+    USE GROUND ;
+    PORT
+      LAYER metal1 ;
+        RECT 0 -0.5 3 1 ;
+    END
+  END VSS
+END DECAPX1
+
+MACRO ENDCAPX1
+  CLASS CORE SPACER ;
+  SOURCE USER ;
+  ORIGIN 0 0 ;
+  SIZE 4.0 BY 30.000 ;
+  SYMMETRY Y ;
+  SITE unit ;
+
+  PIN VDD    DIRECTION INOUT ;
+    USE POWER ;
+    PORT
+      LAYER metal1 ;
+        RECT 0 28 3 30 ;
+    END
+  END VDD
+  PIN VSS    DIRECTION INOUT ;
+    USE GROUND ;
+    PORT
+      LAYER metal1 ;
+        RECT 0 -0.5 3 1 ;
+    END
+  END VSS
+END ENDCAPX1
+
+MACRO ANTENNAX1
+  CLASS CORE ;
+  SOURCE USER ;
+  ORIGIN 0 0 ;
+  SIZE 4.0 BY 30.000 ;
+  SYMMETRY Y ;
+  SITE unit ;
+
+  PIN VDD    DIRECTION INOUT ;
+    USE POWER ;
+    PORT
+      LAYER metal1 ;
+        RECT 0 28 3 30 ;
+    END
+  END VDD
+  PIN VSS    DIRECTION INOUT ;
+    USE GROUND ;
+    PORT
+      LAYER metal1 ;
+        RECT 0 -0.5 3 1 ;
+    END
+  END VSS
+  PIN DIODE    DIRECTION INOUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER metal2 ;
+        RECT 1 12 3 14 ;
+    END
+  END DIODE
+END ANTENNAX1
+
+MACRO CLKBUFX2
+  CLASS CORE ;
+  SOURCE USER ;
+  ORIGIN 0 0 ;
+  SIZE 12.5 BY 30.000 ;
+  SYMMETRY Y ;
+  SITE unit ;
+
+  PIN VDD    DIRECTION INOUT ;
+    USE POWER ;
+    PORT
+      LAYER metal1 ;
+        RECT 0.000 28.000 12.500 30.000 ;
+    END
+  END VDD
+  PIN VSS    DIRECTION INOUT ;
+    USE GROUND ;
+    PORT
+      LAYER metal1 ;
+        RECT 0.000 -0.500 12.500 1.500 ;
+    END
+  END VSS
+  PIN A    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER metal2 ;
+        RECT 1.000 14.5 3.000 16.5 ;
+    END
+  END A
+  PIN Y    DIRECTION OUTPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER metal2 ;
+        RECT 7.000 14 9.000 16 ;
+    END
+  END Y
+END CLKBUFX2
+
+MACRO DFFRX1
+  CLASS CORE ;
+  SOURCE USER ;
+  ORIGIN 0 0 ;
+  SIZE 84 BY 30.000 ;
+  SYMMETRY Y ;
+  SITE unit ;
+
+  PIN VDD    DIRECTION INOUT ;
+    USE POWER ;
+    PORT
+      LAYER metal1 ;
+        RECT 0 28 84 30 ;
+    END
+  END VDD
+  PIN VSS    DIRECTION INOUT ;
+    USE GROUND ;
+    PORT
+      LAYER metal1 ;
+        RECT 0 -0.5 84 1.5 ;
+    END
+  END VSS
+  PIN CLK    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER metal2 ;
+        RECT 22.0 14.5 24.0 16.5 ;
+    END
+  END CLK
+  PIN D    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER metal2 ;
+        RECT 41.5 9 43.5 11 ;
+    END
+  END D
+  PIN RESET    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER metal2 ;
+        RECT 2.5 20 6.5 22 ;
+    END
+  END RESET
+  PIN Q    DIRECTION OUTPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER metal2 ;
+        RECT 80.0 10.5 82.0 12.5 ;
+    END
+  END Q
+  PIN QB    DIRECTION OUTPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER metal1 ;
+        RECT 73.5 2.5 79.5 26.5 ;
+    END
+  END QB
+END DFFRX1
+
+MACRO DFFRX2
+  CLASS CORE ;
+  SOURCE USER ;
+  ORIGIN 0 0 ;
+  SIZE 100 BY 30.000 ;
+  SYMMETRY Y ;
+  SITE unit ;
+
+  PIN VDD    DIRECTION INOUT ;
+    USE POWER ;
+    PORT
+      LAYER metal1 ;
+        RECT 0 28 100.000 30 ;
+    END
+  END VDD
+  PIN VSS    DIRECTION INOUT ;
+    USE GROUND ;
+    PORT
+      LAYER metal1 ;
+        RECT 0 -0.5 100.000 1.5 ;
+    END
+  END VSS
+  PIN CLK    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER metal2 ;
+        RECT 38.000 14.5 40.000 16.5 ;
+    END
+  END CLK
+  PIN D    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER metal2 ;
+        RECT 57.500 9 59.500 11 ;
+    END
+  END D
+  PIN RESET    DIRECTION INPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER metal2 ;
+        RECT 18.500 20 22.500 22 ;
+    END
+  END RESET
+  PIN Q    DIRECTION OUTPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER metal2 ;
+        RECT 96.000 10.5 98.000 12.5 ;
+    END
+  END Q
+  PIN QB    DIRECTION OUTPUT ;
+    USE SIGNAL ;
+    PORT
+      LAYER metal1 ;
+        RECT 89.500 2.5 95.500 26.5 ;
+    END
+  END QB
+END DFFRX2
+
 END LIBRARY

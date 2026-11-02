@@ -49,6 +49,7 @@ process_stats.json
 *.mag~~
 *.ext~
 *.drc
+!libs.tech/klayout/drc/OR1.drc
 *.feedback
 *.ext2spice.log
 *.extresist.log

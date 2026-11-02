@@ -61,6 +61,10 @@ S. Moriyama).  The upstream classes inherit all geometry from `MinedaPCell` /
 | `OR1_MOSCAP` | `w`, `h`, `l` | MOS capacitor |
 | `OR1_RING` | `type` (p/n), `w`, `h`, `t` | `Psub_ring`, `Nsub_ring` |
 | `OR1_TAPLINE` | `type` (p/n), `length`, `width` | `Psub_line`, `Nsub_line` |
+| `OR1_MOSMATCH` | `OR1_MOS` + `gap` | mirrored pair |
+| `OR1_RESARRAY` | `w`, `l`, `hr`, `count`, `pitch` | unit resistor row |
+| `OR1_CAPARRAY` | `w`, `h`, `l`, `cols`, `rows` | unit capacitor matrix |
+| `OR1_ESD` | `fingers` | guarded multi-finger NMOS template |
 | `OR1_PAD` | `size`, `via_pitch` | (bond pad, not upstream) |
 
 ### Semantics

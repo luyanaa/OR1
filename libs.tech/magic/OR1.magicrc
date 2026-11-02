@@ -33,4 +33,4 @@ drc off
 # segments are not pruned out of the network.
 # ---------------------------------------------------------------------------
 extresist threshold 0
-extresist minres 0
+extresist minresist 0

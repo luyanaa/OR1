@@ -14,7 +14,7 @@ set spicefile=or1_fd_sc.sp
 
 # The liberty format file containing standard cell timing and function information
 
-set libertyfile=or1_fd_sc_TT_3P3_25C.lib
+set libertyfile=or1_fd_sc_TT_5P0_25C.lib
 
 # Technology LEF (separate from cell LEF)
 

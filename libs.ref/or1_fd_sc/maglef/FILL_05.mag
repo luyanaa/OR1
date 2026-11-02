@@ -3,6 +3,8 @@ tech OR1
 << metal1 >>
 rect 0 56 1 60
 rect 0 -1 1 2
+<< nwell >>
+rect -4 35 5 62
 << labels >>
 rlabel metal1 s 0 56 1 60 1 VDD
 port 1 nsew power input

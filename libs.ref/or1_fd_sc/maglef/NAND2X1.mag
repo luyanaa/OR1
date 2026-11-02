@@ -7,6 +7,8 @@ rect 0 -1 19 3
 rect 14 33 18 37
 rect 2 33 6 37
 rect 8 16 12 20
+<< nwell >>
+rect -3 35 22 62
 << labels >>
 rlabel metal1 s 0 56 19 60 6 VDD
 port 1 nsew power input

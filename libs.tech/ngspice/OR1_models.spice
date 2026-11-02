@@ -1,4 +1,7 @@
 * OR1 (OpenRule1um) ngspice device models
+* Source: original work for the OR1 PDK (virtual parameters, not a foundry
+*   model card).  Upstream BSIM3V3 cards live in upstream_bsim3/.
+* License: Apache-2.0 (see OR1PDK/LICENSE and PROVENANCE.md).
 * NOTE: tentative virtual parameters pending foundry characterization.
 * Process: 1um nwell CMOS, Lmin=1um, VDD=3.3V.
 
@@ -16,7 +19,13 @@
 + CGSO=3E-10 CGDO=3E-10 CGBO=1E-10
 + RSH=80 XJ=0.3U)
 
-* Poly resistor (sheet rho ~20 ohm/sq in HPOL/RES region)
+* Poly resistor (POL, sheet rho 20 ohm/sq - measured, not assumed:
+* MakeLSI/Measure/16PTS/R-C.md, TEG 500 ohm over 45/1.8 um = 25 squares,
+* confirmed within 4% by the 2022 22PTS TEG).
+* NOTE: HPOL (high-res poly) is a separate process module.  The 22PTS 22HR80k
+* TEG implies Rs_HPOL ~ 3.2 kohm/sq (design assumption 4.0 kohm/sq); this is a
+* hypothesis pending the TEG layout.  This model does NOT cover HPOL.
+* See OR1PDK/docs/measure/2026-11-01-round4-traceability-and-hpol.md.
 .model rp R (RSH=20)
 
 * Diodes (parasitic junctions)

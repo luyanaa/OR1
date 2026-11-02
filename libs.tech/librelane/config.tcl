@@ -42,7 +42,7 @@ set ::env(STD_CELL_LIBRARY_OPT_CDL) $::env(STD_CELL_LIBRARY_CDL)
 source "$::env(PDK_ROOT)/$::env(PDK)/libs.tech/librelane/$::env(STD_CELL_LIBRARY)/config.tcl"
 
 # Timing corners (single corner)
-set ::env(LIB) [dict create "*tt*" [list "$::env(PDK_ROOT)/$::env(PDK)/libs.ref/or1_fd_sc/lib/or1_fd_sc_TT_3P3_25C.lib"]]
+set ::env(LIB) [dict create "*tt*" [list "$::env(PDK_ROOT)/$::env(PDK)/libs.ref/or1_fd_sc/lib/or1_fd_sc_TT_5P0_25C.lib"]]
 set ::env(DEFAULT_CORNER) "nom_tt_3P3_25C"
 set ::env(STA_CORNERS) [list "nom_tt_3P3_25C" "min_tt_3P3_25C" "max_tt_3P3_25C"]
 set ::env(TIMING_VIOLATION_CORNERS) [list "*tt*"]

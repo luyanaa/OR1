@@ -85,3 +85,60 @@ module TIELO (Y);
 output Y;
    assign Y = 1'b0;
 endmodule
+
+module DECAPX1 (VDD, VSS);
+  input VDD;
+  input VSS;
+endmodule
+
+module ENDCAPX1 (VDD, VSS);
+  input VDD;
+  input VSS;
+endmodule
+
+module ANTENNAX1 (VDD, VSS, DIODE);
+  input VDD;
+  input VSS;
+  inout DIODE;
+endmodule
+
+module CLKBUFX2 (A, Y);
+input  A ;
+output Y ;
+
+   buf (Y, A);
+
+   specify
+   endspecify
+
+endmodule
+
+module DFFRX1 (CLK, D, Q, QB, RESET);
+  input CLK;
+  input D;
+  input RESET;
+  output Q;
+  output QB;
+  reg q;
+  always @(posedge CLK or posedge RESET)
+    if (RESET) q <= 1'b0;
+    else       q <= D;
+  assign Q  = q;
+  assign QB = ~q;
+endmodule
+
+module DFFRX2 (CLK, D, Q, QB, RESET);
+  input CLK;
+  input D;
+  input RESET;
+  output Q;
+  output QB;
+  reg q;
+  // same function as DFFRX1; the layout adds the static keeper on the
+  // master node, so the master state is held instead of stored on charge
+  always @(posedge CLK or posedge RESET)
+    if (RESET) q <= 1'b0;
+    else       q <= D;
+  assign Q  = q;
+  assign QB = ~q;
+endmodule
