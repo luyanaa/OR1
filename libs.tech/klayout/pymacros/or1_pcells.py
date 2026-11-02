@@ -353,8 +353,10 @@ class OR1MosGuard(OR1Mos):
             # one solid n-well covering device + ring, enclosing pdiff by 2 um
             self._box(L_NW, ox0 - NW_ENCL, oy0 - NW_ENCL,
                       ox1 + NW_ENCL, oy1 + NW_ENCL)
+        tap = L_DM_NSCN if self.type == "p" else L_DM_PSCN
         for (cx, cy) in self._band_centres(ox0, oy0, ox1, oy1, t, CNT_PITCH):
             self._box(L_CNT, cx - 0.5, cy - 0.5, cx + 0.5, cy + 0.5)
+            self._box(tap, cx - 1.0, cy - 1.0, cx + 1.0, cy + 1.0)
             self._box(L_M1, cx - 1.0, cy - 1.0, cx + 1.0, cy + 1.0)
 
 
@@ -555,8 +557,13 @@ class OR1Ring(_Base):
         if self.type == "n":
             self._ring(L_NW, -NW_ENCL, -NW_ENCL, w + NW_ENCL, h + NW_ENCL,
                        t + 2 * NW_ENCL)
+        # Substrate-tap marker: the LVS deck treats DM_nscn(103)/DM_pscn(104)
+        # as the authoritative well/substrate connection, so every tap contact
+        # needs one (2x2 around the 1x1 contact, the standard-cell pattern).
+        tap = L_DM_NSCN if self.type == "n" else L_DM_PSCN
         for (cx, cy) in self._band_centres(0.0, 0.0, w, h, t, CNT_PITCH):
             self._box(L_CNT, cx - 0.5, cy - 0.5, cx + 0.5, cy + 0.5)
+            self._box(tap, cx - 1.0, cy - 1.0, cx + 1.0, cy + 1.0)
             self._box(L_M1, cx - 1.0, cy - 1.0, cx + 1.0, cy + 1.0)
 
 
@@ -585,9 +592,11 @@ class OR1TapLine(_Base):
         self._box(sel, -0.5, -0.5, L + 0.5, W + 0.5)
         if self.type == "n":
             self._box(L_NW, -NW_ENCL, -NW_ENCL, L + NW_ENCL, W + NW_ENCL)
+        tap = L_DM_NSCN if self.type == "n" else L_DM_PSCN
         x = CNT_ENC + 0.5
         while x + 0.5 <= L - CNT_ENC:
             self._box(L_CNT, x - 0.5, W / 2.0 - 0.5, x + 0.5, W / 2.0 + 0.5)
+            self._box(tap, x - 1.0, W / 2.0 - 1.0, x + 1.0, W / 2.0 + 1.0)
             self._box(L_M1, x - 1.0, W / 2.0 - 1.0, x + 1.0, W / 2.0 + 1.0)
             x += CNT_PITCH
 
