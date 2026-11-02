@@ -87,6 +87,7 @@ simulation/
 !*/lib/*.json
 # the sign-off record is a checked-in artifact, not run scratch
 !test/librelane/signoff.json
+!test/pcell_signoff.json
 *.nl.v
 *.pnl.v
 *.def

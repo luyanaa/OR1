@@ -1,0 +1,115 @@
+{
+  "generated_utc": "2026-11-02T07:47:14Z",
+  "pdk_commit": "847f4a572387424b77e62272d18d07d529c9ce11",
+  "drc": {
+    "exit": 0,
+    "cells": {
+      "T_CNT_DIFF": "0",
+      "T_CNT_POLY": "0",
+      "T_VIA1": "0",
+      "T_VIA2": "0",
+      "T_PAD": "0",
+      "T_MOSN1": "0",
+      "T_MOSN4": "0",
+      "T_MOSP2": "0",
+      "T_MOSNTIE0": "0",
+      "T_MOSVIA": "0",
+      "T_GUARDN": "0",
+      "T_GUARDP": "0",
+      "T_RES": "0",
+      "T_HRES": "0",
+      "T_DRESN": "0",
+      "T_DRESP": "0",
+      "T_DIODE": "0",
+      "T_MOSCAP": "0",
+      "T_MATCH": "0",
+      "T_RESARR": "0",
+      "T_CAPARR": "0",
+      "T_ESD": "0",
+      "T_RINGP": "0",
+      "T_RINGN": "0",
+      "T_LINEP": "0",
+      "T_LINEN": "0"
+    },
+    "pass": true
+  },
+  "lvs": {
+    "exit": 0,
+    "devices": {
+      "T_RES": {
+        "result": "MISMATCH",
+        "note": "negative control, must MISMATCH"
+      },
+      "T_DRESN": {
+        "result": "match",
+        "note": "R compared by netgen"
+      },
+      "T_DRESP": {
+        "result": "match",
+        "note": "R compared by netgen"
+      },
+      "T_MOSCAP": {
+        "result": "MISMATCH",
+        "note": "negative control, must MISMATCH"
+      },
+      "T_DIODE": {
+        "result": "match",
+        "note": "R compared by netgen"
+      },
+      "T_GUARDN": {
+        "result": "match",
+        "note": "W/L compared by netgen"
+      },
+      "T_GUARDP": {
+        "result": "match",
+        "note": "W/L compared by netgen"
+      },
+      "T_MOSN1": {
+        "result": "match",
+        "note": "W/L compared by netgen"
+      },
+      "T_RES-R90": {
+        "result": "MISMATCH",
+        "note": "negative control: wrong R must MISMATCH"
+      },
+      "T_DIODE-rev": {
+        "result": "MISMATCH",
+        "note": "negative control: reversed diode must MISMATCH"
+      },
+      "T_RESARR": {
+        "result": "ok",
+        "note": "expected 3 x POLYRES, found 3"
+      },
+      "T_CAPARR": {
+        "result": "ok",
+        "note": "expected 4 x MOSCAP, found 4"
+      },
+      "T_MATCH": {
+        "result": "ok",
+        "note": "expected 2 x nfet, found 2"
+      },
+      "T_MOSP2": {
+        "result": "match",
+        "note": "W/L compared by netgen"
+      },
+      "T_MOSN4": {
+        "result": "match",
+        "note": "W/L compared by netgen"
+      },
+      "T_MOSN1-W5": {
+        "result": "MISMATCH",
+        "note": "negative control: wrong W must MISMATCH"
+      },
+      "NEG_OPEN": {
+        "result": "MISMATCH",
+        "note": "negative control, must MISMATCH"
+      },
+      "NEG_SHORT": {
+        "result": "MISMATCH",
+        "note": "negative control, must MISMATCH"
+      }
+    },
+    "pass": true
+  },
+  "overall_pass": true
+}
