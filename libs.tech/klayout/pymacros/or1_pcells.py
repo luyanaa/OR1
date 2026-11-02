@@ -555,6 +555,14 @@ class OR1Ring(_Base):
         self.t = max(2.0, self._snap(self.t))
         self.w = max(2 * self.t + 4.0, self._snap(self.w))
         self.h = max(2 * self.t + 4.0, self._snap(self.h))
+        # The n-well ring leaves an inner hole of (dim - 2t - 2*NW_ENCL).  A
+        # hole in (0, 5) violates NWL space < 5.0 (found by OR1_PCELL_SWEEP at
+        # the t clamping bound), so open it to 5 um instead of leaving a slit.
+        for name in ("w", "h"):
+            dim = getattr(self, name)
+            hole = dim - 2 * self.t - 2 * NW_ENCL
+            if 0.0 < hole < 5.0:
+                setattr(self, name, self._snap(dim + (5.0 - hole)))
 
     def produce_impl(self):
         w, h, t = self.w, self.h, self.t
