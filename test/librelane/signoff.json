@@ -1,0 +1,76 @@
+{
+  "design": "counter",
+  "generated_utc": "2026-11-02T05:46:30Z",
+  "git": {
+    "commit": "39311ce2d257bd9b91051fb21916d13e12119c31",
+    "dirty": false
+  },
+  "tools": {
+    "librelane": "LibreLane v3.0.14",
+    "openroad": "/nix/store/6qbn5zjnnnyna6md4rsmiqw4y26y8556-openroad-26Q3/bin/openroad",
+    "klayout": "KLayout 0.30.0",
+    "magic": "8.3.685",
+    "ngspice": "******"
+  },
+  "pdk": {
+    "name": "OR1",
+    "corner": "nom_tt_5P0_25C",
+    "supply_v": 5.0,
+    "library": "libs.ref/or1_fd_sc/lib/or1_fd_sc_TT_5P0_25C.lib"
+  },
+  "run": "/grid/OpenRule1um/OR1PDK/OR1/test/librelane/runs/RUN_2026-11-02_13-38-51",
+  "design_metrics": {
+    "instance_count": 431,
+    "stdcell_instances": 31,
+    "stdcell_area_um2": 13695.0,
+    "utilization": 0.317014,
+    "die_area_um2": 80000.0,
+    "core_area_um2": 43200.0
+  },
+  "routing": {
+    "grt_max_overflow": 0,
+    "drt_violation_lines": 0,
+    "unrouted_nets": 0
+  },
+  "checks": {
+    "klayout_drc": 0,
+    "magic_drc": 0,
+    "lvs_errors": 0,
+    "lvs_unmatched_devices": 0,
+    "lvs_unmatched_nets": 0,
+    "lvs_unmatched_pins": 0,
+    "max_slew_violations": 0,
+    "max_cap_violations": 0,
+    "max_fanout_violations": 0
+  },
+  "timing": {
+    "corner": "nom_tt_5P0_25C",
+    "setup_ws_ns": 14.99013045009886,
+    "hold_ws_ns": 0.19401625299940636,
+    "setup_violations": 0,
+    "hold_violations": 0,
+    "setup_tns_ns": 0.0,
+    "hold_tns_ns": 0.0
+  },
+  "pdn": {
+    "vdd_grid_error_lines": 0,
+    "gnd_grid_error_lines": 0,
+    "ir_drop_report": "not run (RUN_IRDROP_REPORT: false)"
+  },
+  "connectivity": {
+    "disconnected_pins_total": 4,
+    "disconnected_pins_critical": 0,
+    "note": "ERROR_ON_DISCONNECTED_PINS is false; this is the independent count"
+  },
+  "extraction": {
+    "spef_file": "/grid/OpenRule1um/OR1PDK/OR1/test/librelane/runs/RUN_2026-11-02_13-38-51/final/spef/tt/counter.tt.spef",
+    "spef_lines": 973,
+    "spef_resistance_entries": 264,
+    "spef_capacitance_entries": 74,
+    "spef_total_capacitance_pf": 0.170454
+  },
+  "gds": {
+    "path": "/grid/OpenRule1um/OR1PDK/OR1/test/librelane/runs/RUN_2026-11-02_13-38-51/final/gds/counter.gds",
+    "sha256": "f6929d6664e3284ea8f1398afa7de9998e0ea40a9bffd77e44c6c2df845a294d"
+  }
+}
