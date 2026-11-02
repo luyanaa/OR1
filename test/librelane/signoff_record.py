@@ -194,7 +194,8 @@ def main():
             run, "17-openroad-generatepdn", "vdd-grid-errors.rpt")).splitlines() if l.strip()]),
         "gnd_grid_error_lines": len([l for l in read_text(os.path.join(
             run, "17-openroad-generatepdn", "gnd-grid-errors.rpt")).splitlines() if l.strip()]),
-        "ir_drop_report": "not run (RUN_IRDROP_REPORT: false)",
+        "ir_drop_report": ("ran" if m.get("ir__drop__worst") is not None
+                           else "not run (RUN_IRDROP_REPORT: false)"),
     }
     record = {
         "design": "counter",
@@ -224,6 +225,13 @@ def main():
         "checks": checks,
         "timing": timing,
         "pdn": pdn,
+        "ir_drop": {
+            "worst_v": num(m, "ir__drop__worst"),
+            "average_v": num(m, "ir__drop__avg"),
+            "worst_voltage_v": num(m, "ir__voltage__worst"),
+            "supply_v": 5.0,
+            "note": "static analysis; VSRC_LOC_FILES not set, so the supply is an ideal source (optimistic)",
+        },
         "connectivity": {
             "disconnected_pins_total": disc_total,
             "disconnected_pins_critical": disc_critical,

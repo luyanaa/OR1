@@ -1,9 +1,9 @@
 {
   "design": "counter",
-  "generated_utc": "2026-11-02T06:07:19Z",
+  "generated_utc": "2026-11-02T06:29:31Z",
   "git": {
-    "commit": "1b6161cacd2704ecdb996288698e8eb3fea32b42",
-    "dirty": false
+    "commit": "90e66eedc6b316ba1af8348c1476ff62b296cc46",
+    "dirty": true
   },
   "tools": {
     "librelane": "LibreLane v3.0.14",
@@ -18,7 +18,7 @@
     "supply_v": 5.0,
     "library": "libs.ref/or1_fd_sc/lib/or1_fd_sc_TT_5P0_25C.lib"
   },
-  "run": "/grid/OpenRule1um/OR1PDK/OR1/test/librelane/runs/RUN_2026-11-02_14-03-06",
+  "run": "/grid/OpenRule1um/OR1PDK/OR1/test/librelane/runs/RUN_2026-11-02_14-19-45",
   "design_metrics": {
     "instance_count": 431,
     "stdcell_instances": 31,
@@ -55,7 +55,14 @@
   "pdn": {
     "vdd_grid_error_lines": 0,
     "gnd_grid_error_lines": 0,
-    "ir_drop_report": "not run (RUN_IRDROP_REPORT: false)"
+    "ir_drop_report": "ran"
+  },
+  "ir_drop": {
+    "worst_v": 1.27e-05,
+    "average_v": 3.58e-06,
+    "worst_voltage_v": 5.0,
+    "supply_v": 5.0,
+    "note": "static analysis; VSRC_LOC_FILES not set, so the supply is an ideal source (optimistic)"
   },
   "connectivity": {
     "disconnected_pins_total": 4,
@@ -63,14 +70,14 @@
     "note": "ERROR_ON_DISCONNECTED_PINS is false; this is the independent count"
   },
   "extraction": {
-    "spef_file": "/grid/OpenRule1um/OR1PDK/OR1/test/librelane/runs/RUN_2026-11-02_14-03-06/final/spef/tt/counter.tt.spef",
+    "spef_file": "/grid/OpenRule1um/OR1PDK/OR1/test/librelane/runs/RUN_2026-11-02_14-19-45/final/spef/tt/counter.tt.spef",
     "spef_lines": 973,
     "spef_resistance_entries": 264,
     "spef_capacitance_entries": 74,
     "spef_total_capacitance_pf": 0.170454
   },
   "gds": {
-    "path": "/grid/OpenRule1um/OR1PDK/OR1/test/librelane/runs/RUN_2026-11-02_14-03-06/final/gds/counter.gds",
-    "sha256": "5a0b3bce643e935b5449673b6ba572a1ed2aec048e1d4f52331f1712d4d8e294"
+    "path": "/grid/OpenRule1um/OR1PDK/OR1/test/librelane/runs/RUN_2026-11-02_14-19-45/final/gds/counter.gds",
+    "sha256": "b2657be868c7cec9c06d214d0127b13c4fb248e753b3a9b296d948344abb00dd"
   }
 }

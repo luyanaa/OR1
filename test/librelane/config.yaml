@@ -32,7 +32,7 @@ PL_OPTIMIZE_MIRRORING: false
 MACRO_PLACEMENT_CFG: dir::macro_placement.cfg
 DRT_OPT_ITERS: 10
 ERROR_ON_DISCONNECTED_PINS: false
-RUN_IRDROP_REPORT: false
+RUN_IRDROP_REPORT: true
 DEDUPLICATE_CORNERS: true
 # magic's def read paints no routing, so its streamout produces a
 # routing-less GDS. KLayout streamout honours the LEF/DEF layer map and
@@ -136,3 +136,14 @@ CELL_BB_VERILOG_MODELS:
   - pdk_dir::libs.ref/or1_fd_sc/verilog/or1_fd_sc_bb.v
 CELL_VERILOG_MODELS:
   - pdk_dir::libs.ref/or1_fd_sc/verilog/or1_fd_sc_bb.v
+
+# Cut-layer resistance for OpenSTA / IR-drop.  OR1 carries the via resistance
+# on the VIA definitions; LEF 5.4 cannot put RESISTANCE on a TYPE CUT layer, so
+# the values are handed to set_rc.tcl through librelane's VIAS_R hook.
+# 1.0 ohm per cut each (OR1.tlef: VIA M2_M1 / VIA M3_M2 RESISTANCE 1.0).
+VIAS_R:
+  "*":
+    via1:
+      res: 1.0
+    via2:
+      res: 1.0

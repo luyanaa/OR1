@@ -163,3 +163,4 @@ set ::env(MAGIC_RCX_DO_RESISTANCE) 1
 # Filler cells are physical-only: they carry no devices and are not present in
 # the synthesized netlist, so they must be ignored by LVS.
 set ::env(LVS_FLATTEN_CELLS) [list FILL FILL_05 FILL_10 FILL_15 FILL_20 FILL_25]
+
