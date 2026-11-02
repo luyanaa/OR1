@@ -36,11 +36,14 @@ for line in drc.splitlines():
     if m:
         cells[m.group(1)] = m.group(2)
 
-devices = {}
+# keep every check: a cell appears twice (positive check and negative control),
+# so a dict keyed by name would hide the positive result
+devices = []
 for line in lvs.splitlines():
     m = re.match(r"^(\S+)\s+(match|MISMATCH|ok|FAIL)\b(.*)$", line.strip())
     if m:
-        devices[m.group(1)] = {"result": m.group(2), "note": m.group(3).strip(" ()")}
+        devices.append({"check": m.group(1), "result": m.group(2),
+                        "note": m.group(3).strip(" ()")})
 
 try:
     commit = subprocess.run(["git", "-C", pdk, "rev-parse", "HEAD"],

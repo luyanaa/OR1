@@ -1,6 +1,6 @@
 {
-  "generated_utc": "2026-11-02T08:12:20Z",
-  "pdk_commit": "a6c17830e4aa528b3f88d2e30d2b3cf5088152c3",
+  "generated_utc": "2026-11-02T08:13:21Z",
+  "pdk_commit": "962d69c1e1e99e08c576a7bfb48d0d7ef817758a",
   "drc": {
     "exit": 0,
     "cells": {
@@ -35,80 +35,143 @@
   },
   "lvs": {
     "exit": 0,
-    "devices": {
-      "T_RES": {
-        "result": "MISMATCH",
-        "note": "negative control, must MISMATCH"
+    "devices": [
+      {
+        "check": "T_RES",
+        "result": "match",
+        "note": ""
       },
-      "T_DRESN": {
+      {
+        "check": "T_DRESN",
+        "result": "match",
+        "note": ""
+      },
+      {
+        "check": "T_DRESP",
+        "result": "match",
+        "note": ""
+      },
+      {
+        "check": "T_MOSCAP",
+        "result": "match",
+        "note": ""
+      },
+      {
+        "check": "T_DIODE",
+        "result": "match",
+        "note": ""
+      },
+      {
+        "check": "T_GUARDN",
+        "result": "ok",
+        "note": "bulk terminal is the tap net"
+      },
+      {
+        "check": "T_GUARDP",
+        "result": "ok",
+        "note": "bulk terminal is the tap net"
+      },
+      {
+        "check": "T_MOSN1",
+        "result": "ok",
+        "note": "bulk terminal is the tap net"
+      },
+      {
+        "check": "T_RES",
         "result": "match",
         "note": "R compared by netgen"
       },
-      "T_DRESP": {
+      {
+        "check": "T_DRESN",
         "result": "match",
         "note": "R compared by netgen"
       },
-      "T_MOSCAP": {
-        "result": "MISMATCH",
-        "note": "negative control, must MISMATCH"
-      },
-      "T_DIODE": {
+      {
+        "check": "T_DRESP",
         "result": "match",
         "note": "R compared by netgen"
       },
-      "T_GUARDN": {
+      {
+        "check": "T_DIODE",
         "result": "match",
-        "note": "W/L compared by netgen"
+        "note": "R compared by netgen"
       },
-      "T_GUARDP": {
-        "result": "match",
-        "note": "W/L compared by netgen"
-      },
-      "T_MOSN1": {
-        "result": "match",
-        "note": "W/L compared by netgen"
-      },
-      "T_RES-R90": {
+      {
+        "check": "T_RES-R90",
         "result": "MISMATCH",
         "note": "negative control: wrong R must MISMATCH"
       },
-      "T_DIODE-rev": {
+      {
+        "check": "T_DIODE-rev",
         "result": "MISMATCH",
         "note": "negative control: reversed diode must MISMATCH"
       },
-      "T_RESARR": {
+      {
+        "check": "T_RESARR",
         "result": "ok",
         "note": "expected 3 x POLYRES, found 3"
       },
-      "T_CAPARR": {
+      {
+        "check": "T_CAPARR",
         "result": "ok",
         "note": "expected 4 x MOSCAP, found 4"
       },
-      "T_MATCH": {
+      {
+        "check": "T_MATCH",
         "result": "ok",
         "note": "expected 2 x nfet, found 2"
       },
-      "T_MOSP2": {
+      {
+        "check": "T_MOSN1",
         "result": "match",
         "note": "W/L compared by netgen"
       },
-      "T_MOSN4": {
+      {
+        "check": "T_MOSP2",
         "result": "match",
         "note": "W/L compared by netgen"
       },
-      "T_MOSN1-W5": {
+      {
+        "check": "T_MOSN4",
+        "result": "match",
+        "note": "W/L compared by netgen"
+      },
+      {
+        "check": "T_GUARDN",
+        "result": "match",
+        "note": "W/L compared by netgen"
+      },
+      {
+        "check": "T_GUARDP",
+        "result": "match",
+        "note": "W/L compared by netgen"
+      },
+      {
+        "check": "T_MOSN1-W5",
         "result": "MISMATCH",
         "note": "negative control: wrong W must MISMATCH"
       },
-      "NEG_OPEN": {
+      {
+        "check": "T_MOSCAP",
         "result": "MISMATCH",
         "note": "negative control, must MISMATCH"
       },
-      "NEG_SHORT": {
+      {
+        "check": "T_RES",
+        "result": "MISMATCH",
+        "note": "negative control, must MISMATCH"
+      },
+      {
+        "check": "NEG_OPEN",
+        "result": "MISMATCH",
+        "note": "negative control, must MISMATCH"
+      },
+      {
+        "check": "NEG_SHORT",
         "result": "MISMATCH",
         "note": "negative control, must MISMATCH"
       }
-    },
+    ],
     "pass": true
   },
   "overall_pass": true
