@@ -7,10 +7,31 @@ tech/OR1.map            GDS layer map
 pymacros/or1_pcells.py  PCell library  ->  library name "or1_pcells"
 pymacros/test_pcells.py builds one instance of every PCell
 pymacros/verify_pcells.py round-trip check (GDS write -> re-read -> compare)
+pymacros/check_pcells.sh   geometry + per-cell DRC gate
+pymacros/check_pcells_all.sh  both gates + signoff.json (use this one)
 pymacros/example_pcells.gds  output of test_pcells.py
 drc/OR1.drc             signoff DRC deck
 lvs/OR1.lvs, lvs/run_lvs.sh  signoff LVS
+lvs/test_lvs_devices.sh    device-level LVS gate (KLayout + netgen)
 ```
+
+## Sign-off
+
+```
+pymacros/check_pcells_all.sh [report-dir]
+```
+
+runs both gates and writes `signoff.json`:
+
+* `check_pcells.sh` — builds every PCell, checks that the geometry exists and
+  runs the official DRC deck per cell.  Set `OR1_PCELL_SWEEP=1` to also draw
+  every numeric parameter at its clamping bound and at 3x nominal (a nightly
+  gate; it has already caught two real bugs: the MOSCAP `l` clamp and the
+  ring n-well hole).
+* `test_lvs_devices.sh` — KLayout LVS + netgen per device: passive values
+  (R compared, not just topology), MOS W/L, diode polarity, substrate-tap
+  connectivity (the `DM_nscn`/`DM_pscn` markers must reach the device bulk),
+  array unit counts, and five negative controls that must fail.
 
 ## Technology file
 
