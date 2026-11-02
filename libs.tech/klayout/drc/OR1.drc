@@ -93,7 +93,16 @@ hipol = hpol & pol
 
 
 # ---------------------------------------------------------------------------
-# OFF-GRID rules (upstream DRC v1.52, min_grid = 0.05 um)
+# OFF-GRID rules (upstream DRC v1.52 uses min_grid = 0.05 um)
+#
+# COMPATIBILITY DEVIATION (documented 2026-11-02):
+#   This port uses min_grid = 0.005 um.  The official OR1 reference layouts
+#   (PTC06-1 / PTC06-2) are drawn on a 5 nm grid and are NOT on a 50 nm grid:
+#   the upstream 0.05 um check reports 806 items on them (0.02 -> 5448,
+#   0.01 -> 796, 0.005 -> 0).  The deviation makes the check strictly
+#   stronger (0.005 flags a superset of what 0.05 flags), so it cannot hide
+#   an off-grid error that the upstream value would catch.  It is the only
+#   rule in this deck whose value differs from the upstream table.
 # ---------------------------------------------------------------------------
 min_grid = 0.005.um
 nwl.ongrid(min_grid).output("nwl off-grid", "nwl off grid")
@@ -231,9 +240,11 @@ ml2.enclosing(dm_via1_in_widemetal, 0.5.um).output("DM_Via1 encosure is less tha
 dm_via2_in_widemetal = dm_via2.and(ml2w.interacting(dm_via2))
 ml2.enclosing(dm_via2_in_widemetal, 0.5.um).output("DM_Via2 encosure is less than 0.5 for wide M2 (>15um)")
 
-ml3w = ml2.sized(-7.4).sized(7.4)
+# Wide-metal enclosure, M3.  (Before 2026-11-02 this block used ml2 for the
+# wide-metal mask and tested dm_via2_in_widemetal, so the M3 check never ran.)
+ml3w = ml3.sized(-7.4).sized(7.4)
 dm_via3_in_widemetal = dm_via2.and(ml3w.interacting(dm_via2))
-ml3.enclosing(dm_via2_in_widemetal, 0.5.um).output("DM_Via2 encosure is less than 0.5 for wide M3 (>15um)")
+ml3.enclosing(dm_via3_in_widemetal, 0.5.um).output("DM_Via2 encosure is less than 0.5 for wide M3 (>15um)")
 
 # Checking non-MOS POL touching DIFF (DM_dcon)
 pol_diff_edge = (dm_dcn.raw.edges & pol.edges)

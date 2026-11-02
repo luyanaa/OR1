@@ -73,6 +73,13 @@ simulation/
 *.ngspice
 *.spicebin
 *.cfg
+# the DFF legalizer workaround is part of the reproducible flow, not scratch
+!test/librelane/macro_placement.cfg
+# local backups of reference views
+*.round*bak
+*.predffchar
+*.postdff
+*.bak
 
 # synthesis / PnR intermediates
 *.blif

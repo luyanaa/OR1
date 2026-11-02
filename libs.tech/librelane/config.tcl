@@ -1,5 +1,6 @@
 # OR1 (OpenRule1um) librelane technology configuration
-# Process: 1um, 3 metal, 3.3V, variant OR1
+# Process: 1um, 3 metal, 5 V, variant OR1
+# (5 V is the determined operating point: docs/measure/2026-11-01-round9-supply-determination.md)
 
 set ::env(PROCESS) 1000
 set ::env(DEF_UNITS_PER_MICRON) 1000
@@ -14,7 +15,7 @@ if { ![info exist ::env(STD_CELL_LIBRARY_OPT)] } {
 # Power nets
 set ::env(VDD_PIN) "vdd"
 set ::env(GND_PIN) "gnd"
-set ::env(VDD_PIN_VOLTAGE) "3.30"
+set ::env(VDD_PIN_VOLTAGE) "5.00"
 set ::env(GND_PIN_VOLTAGE) "0.00"
 # Cell pins are uppercase VDD/VSS in the LEF; patterns are matched case
 # sensitively by add_global_connection, so use the exact LEF pin names.
@@ -43,8 +44,10 @@ source "$::env(PDK_ROOT)/$::env(PDK)/libs.tech/librelane/$::env(STD_CELL_LIBRARY
 
 # Timing corners (single corner)
 set ::env(LIB) [dict create "*tt*" [list "$::env(PDK_ROOT)/$::env(PDK)/libs.ref/or1_fd_sc/lib/or1_fd_sc_TT_5P0_25C.lib"]]
-set ::env(DEFAULT_CORNER) "nom_tt_3P3_25C"
-set ::env(STA_CORNERS) [list "nom_tt_3P3_25C" "min_tt_3P3_25C" "max_tt_3P3_25C"]
+set ::env(DEFAULT_CORNER) "nom_tt_5P0_25C"
+# only the typical 5 V corner is characterised; do not name corners
+# that have no Liberty file
+set ::env(STA_CORNERS) [list "nom_tt_5P0_25C"]
 set ::env(TIMING_VIOLATION_CORNERS) [list "*tt*"]
 set ::env(TIMING_VIOLATION_CORNERS_OPT) [list "*tt*"]
 

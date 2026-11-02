@@ -539,25 +539,36 @@ def main():
         f.write('    variable_2 : total_output_net_capacitance ;\n')
         f.write(f'    index_1 ({table(SLEWS)}) ;\n')
         f.write(f'    index_2 ({table(LOADS)}) ;\n  }}\n')
+        # Constraint tables: OpenSTA rejects scalar rise_constraint() values and
+        # requires a real table with a related/constrained pin transition axis.
+        f.write('  lu_table_template(constraint_1x1) {\n')
+        f.write('    variable_1 : related_pin_transition ;\n')
+        f.write('    index_1 ("0.1000") ;\n  }\n')
         for cell in selected:
             spec = CELLS[cell]
             r = results[cell]
             f.write(f'  cell ({cell}) {{\n    area : {spec["area"]} ;\n')
+            # Setup/hold constraints belong to the CONSTRAINED INPUT pin (D),
+            # not to the output pin: Liberty associates them with the pin they
+            # constrain and names the clock through related_pin.
+            sh = r.get("__constraints__")
+            constrained = "D" if spec.get("kind") == "dff" else None
             for pin in spec["inputs"]:
-                f.write(f'    pin ({pin}) {{\n      direction : input ;\n      capacitance : 0.004 ;\n    }}\n')
+                f.write(f'    pin ({pin}) {{\n      direction : input ;\n      capacitance : 0.004 ;\n')
+                if pin == constrained and sh:
+                    for timing_type, key in (("setup_rising", "setup"),
+                                             ("hold_rising", "hold")):
+                        f.write('      timing () {\n')
+                        f.write('        related_pin : "CLK" ;\n')
+                        f.write(f'        timing_type : {timing_type} ;\n')
+                        for cname in ("rise_constraint", "fall_constraint"):
+                            f.write(f'        {cname} (constraint_1x1) {{\n')
+                            f.write(f'          values ("{sh[key]:.4f}") ;\n        }}\n')
+                        f.write('      }\n')
+                f.write('    }\n')
             f.write(f'    pin ({spec["output"]}) {{\n      direction : output ;\n')
             f.write(f'      function : "{spec["function"]}" ;\n')
             f.write('      max_capacitance : 0.25 ;\n')
-            sh = r.get("__constraints__")
-            if sh:
-                for timing_type, key in (("setup_rising", "setup"),
-                                         ("hold_rising", "hold")):
-                    f.write('      timing () {\n')
-                    f.write('        related_pin : "CLK" ;\n')
-                    f.write(f'        timing_type : {timing_type} ;\n')
-                    f.write(f'        rise_constraint ({sh[key]:.4f}) ;\n')
-                    f.write(f'        fall_constraint ({sh[key]:.4f}) ;\n')
-                    f.write('      }\n')
             for related, a in r.items():
                 if related.startswith("__"):
                     continue

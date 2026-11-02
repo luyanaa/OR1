@@ -38,6 +38,10 @@ library(or1_fd_sc) {
     index_1 ("0.2000, 0.5000, 1.0000, 2.0000") ;
     index_2 ("0.0100, 0.0300, 0.0600, 0.1200") ;
   }
+  lu_table_template(constraint_1x1) {
+    variable_1 : related_pin_transition ;
+    index_1 ("0.1000") ;
+  }
   lu_table_template(recovery_template_3x6) {
     variable_1 : related_pin_transition;
     variable_2 : constrained_pin_transition;
@@ -389,7 +393,29 @@ library(or1_fd_sc) {
     pin (D) {
       direction : input ;
       capacitance : 0.004 ;
+    
+      timing () {
+        related_pin : "CLK" ;
+        timing_type : setup_rising ;
+        rise_constraint (constraint_1x1) {
+          values ("0.1904") ;
+        }
+        fall_constraint (constraint_1x1) {
+          values ("0.1904") ;
+        }
+      }
+      timing () {
+        related_pin : "CLK" ;
+        timing_type : hold_rising ;
+        rise_constraint (constraint_1x1) {
+          values ("0.0029") ;
+        }
+        fall_constraint (constraint_1x1) {
+          values ("0.0029") ;
+        }
+      }
     }
+
     pin (CLK) {
       direction : input ;
       capacitance : 0.004 ;
@@ -398,18 +424,6 @@ library(or1_fd_sc) {
       direction : output ;
       function : "IQ" ;
       max_capacitance : 0.25 ;
-      timing () {
-        related_pin : "CLK" ;
-        timing_type : setup_rising ;
-        rise_constraint (0.1904) ;
-        fall_constraint (0.1904) ;
-      }
-      timing () {
-        related_pin : "CLK" ;
-        timing_type : hold_rising ;
-        rise_constraint (0.0029) ;
-        fall_constraint (0.0029) ;
-      }
       timing () {
         related_pin : "CLK" ;
         timing_sense : positive_unate ;
@@ -515,7 +529,29 @@ library(or1_fd_sc) {
     pin (D) {
       direction : input ;
       capacitance : 0.004 ;
+    
+      timing () {
+        related_pin : "CLK" ;
+        timing_type : setup_rising ;
+        rise_constraint (constraint_1x1) {
+          values ("0.1904") ;
+        }
+        fall_constraint (constraint_1x1) {
+          values ("0.1904") ;
+        }
+      }
+      timing () {
+        related_pin : "CLK" ;
+        timing_type : hold_rising ;
+        rise_constraint (constraint_1x1) {
+          values ("0.0029") ;
+        }
+        fall_constraint (constraint_1x1) {
+          values ("0.0029") ;
+        }
+      }
     }
+
     pin (CLK) {
       direction : input ;
       capacitance : 0.004 ;
@@ -528,18 +564,6 @@ library(or1_fd_sc) {
       direction : output ;
       function : "IQ" ;
       max_capacitance : 0.25 ;
-      timing () {
-        related_pin : "CLK" ;
-        timing_type : setup_rising ;
-        rise_constraint (0.1904) ;
-        fall_constraint (0.1904) ;
-      }
-      timing () {
-        related_pin : "CLK" ;
-        timing_type : hold_rising ;
-        rise_constraint (0.0029) ;
-        fall_constraint (0.0029) ;
-      }
       timing () {
         related_pin : "CLK" ;
         timing_sense : positive_unate ;
@@ -588,7 +612,29 @@ library(or1_fd_sc) {
     pin (D) {
       direction : input ;
       capacitance : 0.004 ;
+    
+      timing () {
+        related_pin : "CLK" ;
+        timing_type : setup_rising ;
+        rise_constraint (constraint_1x1) {
+          values ("0.1904") ;
+        }
+        fall_constraint (constraint_1x1) {
+          values ("0.1904") ;
+        }
+      }
+      timing () {
+        related_pin : "CLK" ;
+        timing_type : hold_rising ;
+        rise_constraint (constraint_1x1) {
+          values ("0.0029") ;
+        }
+        fall_constraint (constraint_1x1) {
+          values ("0.0029") ;
+        }
+      }
     }
+
     pin (CLK) {
       direction : input ;
       capacitance : 0.004 ;
@@ -601,18 +647,6 @@ library(or1_fd_sc) {
       direction : output ;
       function : "IQ" ;
       max_capacitance : 0.25 ;
-      timing () {
-        related_pin : "CLK" ;
-        timing_type : setup_rising ;
-        rise_constraint (0.1904) ;
-        fall_constraint (0.1904) ;
-      }
-      timing () {
-        related_pin : "CLK" ;
-        timing_type : hold_rising ;
-        rise_constraint (0.0029) ;
-        fall_constraint (0.0029) ;
-      }
       timing () {
         related_pin : "CLK" ;
         timing_sense : positive_unate ;

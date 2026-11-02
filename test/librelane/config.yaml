@@ -59,7 +59,7 @@ MAGIC_DRC_MAGLEFS:
   - pdk_dir::libs.ref/or1_fd_sc/maglef/TIEHI.mag
   - pdk_dir::libs.ref/or1_fd_sc/maglef/TIELO.mag
 STA_CORNERS:
-  - nom_tt_3P3_25C
+  - nom_tt_5P0_25C
 
 # physical-only filler cells carry no devices; flatten them for LVS
 LVS_FLATTEN_CELLS: [FILL, TAP, FILL_05, FILL_10, FILL_15, FILL_20, FILL_25]

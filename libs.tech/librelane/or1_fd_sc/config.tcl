@@ -1,8 +1,9 @@
 # OR1 standard cell library config for librelane
 
-set ::env(LIB_SYNTH) "$::env(PDK_ROOT)/$::env(PDK)/libs.ref/or1_fd_sc/lib/or1_fd_sc_TT_3P3_25C.lib"
-set ::env(LIB_FASTEST) "$::env(PDK_ROOT)/$::env(PDK)/libs.ref/or1_fd_sc/lib/or1_fd_sc_TT_3P3_25C.lib"
-set ::env(LIB_SLOWEST) "$::env(PDK_ROOT)/$::env(PDK)/libs.ref/or1_fd_sc/lib/or1_fd_sc_TT_3P3_25C.lib"
+# One 5 V profile: synthesis, STA and resizer all use the same Liberty
+set ::env(LIB_SYNTH) "$::env(PDK_ROOT)/$::env(PDK)/libs.ref/or1_fd_sc/lib/or1_fd_sc_TT_5P0_25C.lib"
+set ::env(LIB_FASTEST) $::env(LIB_SYNTH)
+set ::env(LIB_SLOWEST) $::env(LIB_SYNTH)
 set ::env(LIB_TYPICAL) $::env(LIB_SYNTH)
 
 # No mux/adder helper cells in this library
