@@ -135,6 +135,56 @@ for c in T_GUARDN T_GUARDP T_MOSN1; do
     printf '%-12s %-10s (bulk terminal is the tap net)\n' "$c" "$r"
 done
 
+# --- passive values (R compared by netgen, not just topology) --------------
+# The KLayout comparer ignores passive parameters, so a wrong length still
+# "matches" there.  netgen compares the extracted R value against the
+# reference, which closes that hole.
+cat > "$OUT/passive_ref.cdl" <<'EOF'
+.subckt T_RES A B
+R1 A B 60 POLYRES
+.ends
+.subckt T_DRESN A B
+R1 A B 126 NDIFFRES
+.ends
+.subckt T_DRESP A B
+R1 A B 126 PDIFFRES
+.ends
+EOF
+
+passive_value() {  # passive_value <cell>
+    klayout -b -zz -r "$HERE/OR1.lvs" -rd input="$LGDS" -rd topcell="$1" \
+            -rd target_netlist="$OUT/$1.sp" > "$OUT/$1.val.extract.log" 2>&1 || true
+    cat > "$OUT/$1.val.lvs" <<EOF
+set c1 [readnet spice $OUT/$1.sp]
+set c2 [readnet spice $OUT/passive_ref.cdl]
+lvs "\$c1 $1" "\$c2 $1" "$SETUP" "$OUT/$1.val.rpt"
+EOF
+    netgen -batch source "$OUT/$1.val.lvs" > "$OUT/$1.val.log" 2>&1 || true
+    if grep -q "Circuits match uniquely" "$OUT/$1.val.log" \
+       && ! grep -q "Property errors" "$OUT/$1.val.log"; then
+        echo match
+    else
+        echo MISMATCH
+    fi
+}
+
+printf '%-12s %-10s\n' passive-value lvs
+for c in T_RES T_DRESN T_DRESP; do
+    r=$(passive_value "$c")
+    printf '%-12s %-10s (R compared by netgen)\n' "$c" "$r"
+    [ "$r" = match ] || bad=1
+done
+
+# negative control: wrong resistor value must produce property errors
+sed -i 's/R1 A B 60 POLYRES/R1 A B 90 POLYRES/' "$OUT/passive_ref.cdl"
+if netgen -batch source "$OUT/T_RES.val.lvs" 2>&1 | grep -q "Property errors"; then
+    r=MISMATCH
+else
+    r=match
+fi
+printf '%-12s %-10s (negative control: wrong R must MISMATCH)\n' T_RES-R90 "$r"
+[ "$r" = MISMATCH ] || bad=1
+
 # --- MOS device LVS (W/L enforced by netgen) --------------------------------
 # References are generated from the same PCell parameters.  nf fingers are
 # extracted as nf series devices (node chain S, N1..N(nf-1), D).
