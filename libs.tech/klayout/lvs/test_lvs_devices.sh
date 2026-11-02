@@ -103,7 +103,7 @@ R1 A B 126 PDIFFRES
 .ends
 
 .subckt T_DIODE A C
-D1 A C PDIO
+D1 A C PDIO A=24P P=20U
 .ends
 
 .subckt T_MOSCAP A B
@@ -120,7 +120,7 @@ run() {  # run <cell> <reference> -> echoes match/mismatch
 
 printf '%-12s %-10s\n' device klayout
 bad=0
-for c in T_RES T_DRESN T_DRESP T_MOSCAP; do
+for c in T_RES T_DRESN T_DRESP T_MOSCAP T_DIODE; do
     r=$(run "$c" "$OUT/reference.cdl" "pos_$c")
     printf '%-12s %-10s\n' "$c" "$r"
     [ "$r" = match ] || bad=1
@@ -149,6 +149,9 @@ R1 A B 126 NDIFFRES
 .subckt T_DRESP A B
 R1 A B 126 PDIFFRES
 .ends
+.subckt T_DIODE A C
+D1 A C PDIO A=24P P=20U
+.ends
 EOF
 
 passive_value() {  # passive_value <cell>
@@ -169,7 +172,7 @@ EOF
 }
 
 printf '%-12s %-10s\n' passive-value lvs
-for c in T_RES T_DRESN T_DRESP; do
+for c in T_RES T_DRESN T_DRESP T_DIODE; do
     r=$(passive_value "$c")
     printf '%-12s %-10s (R compared by netgen)\n' "$c" "$r"
     [ "$r" = match ] || bad=1
@@ -183,6 +186,16 @@ else
     r=match
 fi
 printf '%-12s %-10s (negative control: wrong R must MISMATCH)\n' T_RES-R90 "$r"
+[ "$r" = MISMATCH ] || bad=1
+
+# diode polarity: netgen must reject a reversed anode/cathode
+sed -i 's/^D1 A C PDIO/D1 C A PDIO/' "$OUT/passive_ref.cdl"
+if netgen -batch source "$OUT/T_DIODE.val.lvs" 2>&1 | grep -q "Circuits match uniquely"; then
+    r=match
+else
+    r=MISMATCH
+fi
+printf '%-12s %-10s (negative control: reversed diode must MISMATCH)\n' T_DIODE-rev "$r"
 [ "$r" = MISMATCH ] || bad=1
 
 # --- MOS device LVS (W/L enforced by netgen) --------------------------------
@@ -242,9 +255,8 @@ fi
 printf '%-12s %-10s (negative control: wrong W must MISMATCH)\n' T_MOSN1-W5 "$r"
 [ "$r" = MISMATCH ] || bad=1
 
-# diode: not extracted by this deck (see OR1.lvs / STATUS section 24)
-r=$(run T_DIODE "$OUT/reference.cdl" "pos_T_DIODE")
-printf '%-12s %-10s (not extracted, not gating)\n' T_DIODE "$r"
+# diode polarity is checked in the netgen section below (the KLayout comparer
+# treats the two diode terminals as symmetric)
 
 # --- negative controls ------------------------------------------------------
 # 1) reference misses a device

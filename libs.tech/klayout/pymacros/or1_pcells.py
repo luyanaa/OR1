@@ -478,6 +478,9 @@ class OR1Diode(_Base):
         self._box(L_M1, W / 2.0 - 1.0, H / 2.0 - 1.0, W / 2.0 + 1.0, H / 2.0 + 1.0)
         yc = -(g + 1.0)
         self._box(L_CNT, W / 2.0 - 0.5, yc - 0.5, W / 2.0 + 0.5, yc + 0.5)
+        # the n+ cathode is also the n-well tap: without this marker the deck
+        # cannot tie the well (cathode) to the cathode metal
+        self._box(L_DM_NSCN, W / 2.0 - 1.0, yc - 1.0, W / 2.0 + 1.0, yc + 1.0)
         self._box(L_M1, W / 2.0 - 1.0, yc - 1.0, W / 2.0 + 1.0, yc + 1.0)
 
 
@@ -502,8 +505,12 @@ class OR1MosCap(_Base):
         self.w = max(4.0, self._snap(self.w))
         self.h = max(2.0, self._snap(self.h))
         self.l = max(MIN_W, self._snap(self.l))
-        if self.l > self.w - 2.0:
-            self.l = self.w - 2.0
+        # The bottom-plate contacts sit at x=0.5..1.5 and W-1.5..W-0.5; the poly
+        # strip is centred, so L > W-3 would put the gate over a contact and the
+        # deck reports dcn-MOS overlap.  (W-2 was not enough: found by the
+        # OR1_PCELL_SWEEP run at the l clamping bound.)
+        if self.l > self.w - 3.0:
+            self.l = self.w - 3.0
 
     def produce_impl(self):
         W, H, L = self.w, self.h, self.l

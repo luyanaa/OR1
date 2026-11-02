@@ -169,21 +169,26 @@ rbody_pd = ((diff & parea) & res) - cnt
 extract_devices(resistor("PDIFFRES", 42.0),
     { "R" => rbody_pd, "C" => rterm_pd, "tA" => rterm_pd, "tB" => rterm_pd })
 
-# p+ / n-well diode: NOT extracted.
+# p+ / n-well diode.
 #
-# The KLayout "diode" extractor needs P and N to be disjoint regions that
-# overlap at the junction.  A p+/n-well diode (anode inside the well, the well
-# is the cathode) has P contained in N, and the extractor then resolves *both*
-# terminals onto the anode net - verified on a minimal synthetic layout as well
-# as on the OR1_DIODE PCell:
+# KLayout's diode extractor builds the device where the P and N layers
+# overlap; P forms the anode, N the cathode.  For a p+/n-well diode the anode
+# is the p+ diffusion inside the well and the cathode is the well itself:
 #
-#   D$1 A A PDIO        (cathode contact, well, n+ ring, none of them helped)
+#     dio_p = pdif & nwl & diom      (the DIO marker scopes it to the device)
+#     dio_n = nwl                     (the well is the cathode)
 #
-# Cutting the well out of the anode area removes the junction and no device is
-# produced at all.  Rather than ship a netlist with a silently shorted diode,
-# the device is left out until the cathode is drawn as a separate ring or a
-# dedicated device class is added.  See STATUS-2026-10-31-contract-conflicts.md
-# section 24.
+# Two connectivity requirements have to be met or extraction fails with
+# "Terminal 'A' ... isn't connected":
+#   * the anode diffusion is excluded from sdp (it must not become a MOS S/D),
+#     so it needs its own contact rule: connect(dio_p, cnt);
+#   * the n+ cathode is also the well tap, so the cell must draw a DM_nscn
+#     marker over it (the PCell does) - otherwise the well and the cathode
+#     metal stay on different nets.
+dio_p = pdif & nwl & diom
+dio_n = nwl
+connect(dio_p, cnt)
+extract_devices(diode("PDIO"), { "P" => dio_p, "N" => dio_n })
 
 # MOS capacitor: poly plate over the diffusion plate inside the CAP marker.
 capp1 = pol & capm

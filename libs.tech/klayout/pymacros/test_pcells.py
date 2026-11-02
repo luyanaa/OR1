@@ -57,6 +57,26 @@ for name, pc, params in CASES:
     names.append(name)
     top.insert(pya.CellInstArray(c.cell_index(), pya.Trans()))
 
+# Parameter sweep (OR1_PCELL_SWEEP=1): every numeric parameter is also drawn at
+# its clamping bound (a tiny value) and at 3x the nominal value (a large one),
+# so the DRC gate covers the coerce_parameters_impl limits, not just one point.
+if os.environ.get("OR1_PCELL_SWEEP"):
+    for name, pc, params in CASES:
+        for key, value in params.items():
+            if isinstance(value, bool) or not isinstance(value, (int, float)):
+                continue
+            for tag, probe in (("lo", 0.1), ("hi", max(value * 3.0, 3.0))):
+                variant = dict(params)
+                variant[key] = int(probe) if isinstance(value, int) else probe
+                cname = "%s__%s_%s" % (name, key, tag)
+                try:
+                    c = ly.create_cell(pc, "or1_pcells", variant)
+                except Exception:
+                    continue
+                c.name = cname
+                names.append(cname)
+                top.insert(pya.CellInstArray(c.cell_index(), pya.Trans()))
+
 out = os.environ.get("OR1_PCELL_TEST_GDS", "/tmp/or1_pcells_test.gds")
 ly.write(out)
 print("wrote %s" % out)
