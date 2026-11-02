@@ -194,6 +194,12 @@ extract_devices(diode("PDIO"), { "P" => dio_p, "N" => dio_n })
 capp1 = pol & capm
 capp2 = diff & capm
 connect(capp1, cnt)
+# The capacitor plate (pol & capm) is a device terminal layer, so it is not
+# part of the general poly connectivity: without this rule the top plate ends
+# up on its own anonymous net and the poly head / M1 pad that should name it
+# stay disconnected.  Verified on OR1_MOSCAP: with the rule the extracted
+# device is "C$1 A B MOSCAP" (A = the labelled poly net), without it "C$1 $4 B".
+connect(capp1, polc)
 connect(capp2, cnt)
 extract_devices(capacitor("MOSCAP", 1.0e-15),
     { "P1" => capp1, "P2" => capp2 })

@@ -152,6 +152,9 @@ R1 A B 126 PDIFFRES
 .subckt T_DIODE A C
 D1 A C PDIO A=24P P=20U
 .ends
+.subckt T_MOSCAP A B
+C1 A B 8e-15 MOSCAP
+.ends
 EOF
 
 passive_value() {  # passive_value <cell>
@@ -172,7 +175,7 @@ EOF
 }
 
 printf '%-12s %-10s\n' passive-value lvs
-for c in T_RES T_DRESN T_DRESP T_DIODE; do
+for c in T_RES T_DRESN T_DRESP T_DIODE T_MOSCAP; do
     r=$(passive_value "$c")
     printf '%-12s %-10s (R compared by netgen)\n' "$c" "$r"
     [ "$r" = match ] || bad=1
@@ -196,6 +199,16 @@ else
     r=MISMATCH
 fi
 printf '%-12s %-10s (negative control: reversed diode must MISMATCH)\n' T_DIODE-rev "$r"
+[ "$r" = MISMATCH ] || bad=1
+
+# capacitor value: a wrong C must produce property errors
+sed -i 's/8e-15/4e-15/' "$OUT/passive_ref.cdl"
+if netgen -batch source "$OUT/T_MOSCAP.val.lvs" 2>&1 | grep -q "Property errors"; then
+    r=MISMATCH
+else
+    r=match
+fi
+printf '%-12s %-10s (negative control: wrong C must MISMATCH)\n' T_MOSCAP-C4 "$r"
 [ "$r" = MISMATCH ] || bad=1
 
 # --- arrays / matching: unit device count and class -------------------------
