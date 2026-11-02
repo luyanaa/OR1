@@ -198,6 +198,22 @@ fi
 printf '%-12s %-10s (negative control: reversed diode must MISMATCH)\n' T_DIODE-rev "$r"
 [ "$r" = MISMATCH ] || bad=1
 
+# --- arrays / matching: unit device count and class -------------------------
+# RESARRAY / CAPARRAY / MOSMATCH are deliberately unconnected unit arrays
+# ("wiring by hand"), so a netlist compare is not meaningful.  What must hold
+# is that the cell contains the requested number of unit devices of the right
+# class - a missing or merged unit is a real layout bug.
+printf '%-12s %-10s\n' array check
+for spec in "T_RESARR POLYRES 3" "T_CAPARR MOSCAP 4" "T_MATCH nfet 2"; do
+    set -- $spec
+    klayout -b -zz -r "$HERE/OR1.lvs" -rd input="$LGDS" -rd topcell="$1" \
+            -rd target_netlist="$OUT/$1.arr.sp" > "$OUT/$1.arr.log" 2>&1 || true
+    n=$(awk -v cls="$2" '$1 ~ /^[RCM]/ { for (i = 1; i <= NF; i++) if ($i == cls) { c++; break } } END { print c+0 }' \
+        "$OUT/$1.arr.sp" 2>/dev/null || echo 0)
+    if [ "$n" = "$3" ]; then r=ok; else r=FAIL; bad=1; fi
+    printf '%-12s %-10s (expected %s x %s, found %s)\n' "$1" "$r" "$3" "$2" "$n"
+done
+
 # --- MOS device LVS (W/L enforced by netgen) --------------------------------
 # References are generated from the same PCell parameters.  nf fingers are
 # extracted as nf series devices (node chain S, N1..N(nf-1), D).
