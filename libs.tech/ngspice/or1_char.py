@@ -534,6 +534,11 @@ def main():
         f.write(f'  input_threshold_pct_fall : {_ith:.1f} ;\n')
         f.write('  output_threshold_pct_rise : 50 ;\n  output_threshold_pct_fall : 50 ;\n')
         f.write(f'  nom_voltage : {VDD:g} ;\n  nom_temperature : 25 ;\n')
+        # librelane reads the supply for IR-drop from operating_conditions
+        f.write('  operating_conditions(tt_5P0_25C) {\n')
+        f.write('    process : 1.0 ;\n    temperature : 25.0 ;\n')
+        f.write(f'    voltage : {VDD:g} ;\n    tree_type : balanced_tree ;\n  }}\n')
+        f.write('  default_operating_conditions : tt_5P0_25C ;\n')
         f.write('  lu_table_template(char_4x4) {\n')
         f.write('    variable_1 : input_net_transition ;\n')
         f.write('    variable_2 : total_output_net_capacitance ;\n')

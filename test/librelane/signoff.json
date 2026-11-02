@@ -1,9 +1,9 @@
 {
   "design": "counter",
-  "generated_utc": "2026-11-02T05:53:20Z",
+  "generated_utc": "2026-11-02T06:07:04Z",
   "git": {
-    "commit": "c5711654d0b7dd1546fe127f9edb4fd932a04736",
-    "dirty": false
+    "commit": "4432b618ef35fb6470ca839327a67da5d02b666a",
+    "dirty": true
   },
   "tools": {
     "librelane": "LibreLane v3.0.14",
@@ -18,7 +18,7 @@
     "supply_v": 5.0,
     "library": "libs.ref/or1_fd_sc/lib/or1_fd_sc_TT_5P0_25C.lib"
   },
-  "run": "/grid/OpenRule1um/OR1PDK/OR1/test/librelane/runs/RUN_2026-11-02_13-48-43",
+  "run": "/grid/OpenRule1um/OR1PDK/OR1/test/librelane/runs/RUN_2026-11-02_14-03-06",
   "design_metrics": {
     "instance_count": 431,
     "stdcell_instances": 31,
@@ -63,14 +63,14 @@
     "note": "ERROR_ON_DISCONNECTED_PINS is false; this is the independent count"
   },
   "extraction": {
-    "spef_file": "/grid/OpenRule1um/OR1PDK/OR1/test/librelane/runs/RUN_2026-11-02_13-48-43/final/spef/tt/counter.tt.spef",
+    "spef_file": "/grid/OpenRule1um/OR1PDK/OR1/test/librelane/runs/RUN_2026-11-02_14-03-06/final/spef/tt/counter.tt.spef",
     "spef_lines": 973,
     "spef_resistance_entries": 264,
     "spef_capacitance_entries": 74,
     "spef_total_capacitance_pf": 0.170454
   },
   "gds": {
-    "path": "/grid/OpenRule1um/OR1PDK/OR1/test/librelane/runs/RUN_2026-11-02_13-48-43/final/gds/counter.gds",
-    "sha256": "7896720ea07a18a1e6701455c38fa4b514868b12e50f79f7cde5b64bb3c9673f"
+    "path": "/grid/OpenRule1um/OR1PDK/OR1/test/librelane/runs/RUN_2026-11-02_14-03-06/final/gds/counter.gds",
+    "sha256": "5a0b3bce643e935b5449673b6ba572a1ed2aec048e1d4f52331f1712d4d8e294"
   }
 }

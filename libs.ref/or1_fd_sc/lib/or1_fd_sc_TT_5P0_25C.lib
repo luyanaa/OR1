@@ -24,6 +24,13 @@ library(or1_fd_sc) {
   output_threshold_pct_fall : 50 ;
   nom_voltage : 5 ;
   nom_temperature : 25 ;
+  operating_conditions(tt_5P0_25C) {
+    process : 1.0 ;
+    temperature : 25.0 ;
+    voltage : 5.0 ;
+    tree_type : balanced_tree ;
+  }
+  default_operating_conditions : tt_5P0_25C ;
   /* Library-wide design-rule defaults.  CTS (and resizer) read the library
      default_max_transition/default_max_capacitance for buffer slew/cap
      limits when a pin does not carry its own attribute; OR1 cells omit the
