@@ -54,9 +54,11 @@ select_models(os.environ.get("OR1_CHAR_MODELS", "virtual"))
 VDD = 5.0
 CORNERS = ["tt"]
 
-# 20-80 % input transitions (ns) and output loads (pF)
-SLEWS = [0.2, 0.5, 1.0, 2.0]
-LOADS = [0.01, 0.03, 0.06, 0.12]
+# 20-80 % input transitions (ns) and output loads (pF).  The grid reaches the
+# real design operating point (slew ~0.05 ns, loads up to 0.65 pF), so the
+# interpolation range covers actual OR1 netlists instead of extrapolating.
+SLEWS = [0.05, 0.10, 0.20, 0.50, 2.0]
+LOADS = [0.01, 0.05, 0.12, 0.30, 0.70]
 
 # cell -> (inputs, output, arcs[(related_pin, other_inputs{})], function)
 CELLS = {
@@ -266,7 +268,7 @@ Cout {out_pin} 0 {load}p
 {netlist(devices, pin_map(devices, spec["inputs"], out_pin))}
 .ends
 X1 {" ".join(ports)} vdd {cell}
-.tran 2p 80n
+.tran 1p 80n
 {meas_tphl}
 {meas_tplh}
 .meas tran tfall trig v({out_pin}) val={0.8*VDD:.6g} fall=1 targ v({out_pin}) val={0.2*VDD:.6g} fall=1
@@ -400,7 +402,7 @@ def _transition(t, q, t0, t1):
     return abs(tb - ta)
 
 
-def run_dff_constraint(cell, devices, slew, load, mode, iters=10, span=3.0):
+def run_dff_constraint(cell, devices, slew, load, mode, iters=14, span=3.0):
     """Setup or hold time of the D pin against the CLK rising edge (ns).
 
     Bisection: the smallest data-to-clock separation at which the third clock
@@ -412,11 +414,11 @@ def run_dff_constraint(cell, devices, slew, load, mode, iters=10, span=3.0):
         if mode == "setup":
             # D=0 through edges 1-2, raised (25-off) before edge 3.
             t, q = _dff_sim(cell, devices, slew, load, 0,
-                            [(25.0 - off, VDD)], tstop=36.0, step=5.0)
+                            [(25.0 - off, VDD)], tstop=36.0, step=1.0)
         else:
             # D=1 through edges 1-3, falls (25+off) after edge 3.
             t, q = _dff_sim(cell, devices, slew, load, VDD,
-                            [(25.0 + off, 0)], tstop=36.0, step=5.0)
+                            [(25.0 + off, 0)], tstop=36.0, step=1.0)
         if not t:
             return False
         return q[-1] > vmid
@@ -491,11 +493,32 @@ def table(vals):
 def main():
     global VDD
     args = sys.argv[1:]
+    corner_name = None
+    temp = 25.0
+    note = None
     if "--vdd" in args:
         i = args.index("--vdd")
         if i + 1 >= len(args):
             raise SystemExit("--vdd needs a value in volts")
         VDD = float(args[i + 1])
+        del args[i:i + 2]
+    if "--corner" in args:
+        i = args.index("--corner")
+        if i + 1 >= len(args):
+            raise SystemExit("--corner needs a name (e.g. tt_5P0_25C)")
+        corner_name = args[i + 1]
+        del args[i:i + 2]
+    if "--temp" in args:
+        i = args.index("--temp")
+        if i + 1 >= len(args):
+            raise SystemExit("--temp needs a value in C")
+        temp = float(args[i + 1])
+        del args[i:i + 2]
+    if "--note" in args:
+        i = args.index("--note")
+        if i + 1 >= len(args):
+            raise SystemExit("--note needs a string")
+        note = args[i + 1]
         del args[i:i + 2]
     if "--models" in args:
         i = args.index("--models")
@@ -508,6 +531,14 @@ def main():
         raise SystemExit(
             "usage: or1_char.py [--models virtual|bsim3] [--vdd V] <cell-spice-dir> <out.lib>")
     src, out_lib = args
+    if corner_name is None:
+        # e.g. vdd=5.0/temp=25 -> tt_5P0_25C
+        corner_name = "tt_%gP%d_%gC" % (VDD, int(temp), temp)
+    # Anything not the plain TT operating point is treated as an estimated
+    # corner: the LEVEL=1 models carry no process spread.
+    is_est = corner_name != "tt_%gP%d_%gC" % (VDD, int(temp), temp)
+    note = note or ("voltage corner from LEVEL=1 TT models; "
+                    "no process-spread data")
     only = os.environ.get("OR1_CHAR_CELLS", "").split()
     # DFFPOSX1 is opt-in only: its clock polarity is still unresolved
     # (round16 note), so a default run must not emit a bogus table.
@@ -533,13 +564,16 @@ def main():
         f.write(f'  input_threshold_pct_rise : {_ith:.1f} ;\n')
         f.write(f'  input_threshold_pct_fall : {_ith:.1f} ;\n')
         f.write('  output_threshold_pct_rise : 50 ;\n  output_threshold_pct_fall : 50 ;\n')
-        f.write(f'  nom_voltage : {VDD:g} ;\n  nom_temperature : 25 ;\n')
+        f.write(f'  nom_voltage : {VDD:g} ;\n  nom_temperature : {temp:g} ;\n')
+        if is_est:
+            f.write(f'  /* estimated corner: {corner_name} - {note} */\n')
         # librelane reads the supply for IR-drop from operating_conditions
-        f.write('  operating_conditions(tt_5P0_25C) {\n')
-        f.write('    process : 1.0 ;\n    temperature : 25.0 ;\n')
+        f.write(f'  operating_conditions({corner_name}) {{\n')
+        f.write('    process : 1.0 ;\n')
+        f.write(f'    temperature : {temp:g} ;\n')
         f.write(f'    voltage : {VDD:g} ;\n    tree_type : balanced_tree ;\n  }}\n')
-        f.write('  default_operating_conditions : tt_5P0_25C ;\n')
-        f.write('  lu_table_template(char_4x4) {\n')
+        f.write(f'  default_operating_conditions : {corner_name} ;\n')
+        f.write('  lu_table_template(char_5x5) {\n')
         f.write('    variable_1 : input_net_transition ;\n')
         f.write('    variable_2 : total_output_net_capacitance ;\n')
         f.write(f'    index_1 ({table(SLEWS)}) ;\n')
@@ -573,7 +607,7 @@ def main():
                 f.write('    }\n')
             f.write(f'    pin ({spec["output"]}) {{\n      direction : output ;\n')
             f.write(f'      function : "{spec["function"]}" ;\n')
-            f.write('      max_capacitance : 0.25 ;\n')
+            f.write('      max_capacitance : 0.70 ;\n')
             for related, a in r.items():
                 if related.startswith("__"):
                     continue
@@ -583,7 +617,7 @@ def main():
                 f.write(f'        timing_sense : {sense} ;\n')
                 for name, key in (("cell_rise", "rise"), ("cell_fall", "fall"),
                                   ("rise_transition", "rtr"), ("fall_transition", "ftf")):
-                    f.write(f'        {name}(char_4x4) {{\n          values ( \\\n')
+                    f.write(f'        {name}(char_5x5) {{\n          values ( \\\n')
                     rows = a[key]
                     for i, row in enumerate(rows):
                         sep = "," if i < len(rows) - 1 else ""

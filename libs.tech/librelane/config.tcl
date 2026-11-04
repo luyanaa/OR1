@@ -42,14 +42,15 @@ set ::env(STD_CELL_LIBRARY_OPT_CDL) $::env(STD_CELL_LIBRARY_CDL)
 # SCL-specific config
 source "$::env(PDK_ROOT)/$::env(PDK)/libs.tech/librelane/$::env(STD_CELL_LIBRARY)/config.tcl"
 
-# Timing corners (single corner)
-set ::env(LIB) [dict create "*tt*" [list "$::env(PDK_ROOT)/$::env(PDK)/libs.ref/or1_fd_sc/lib/or1_fd_sc_TT_5P0_25C.lib"]]
+# Timing corners (three corners; SS/FF are estimated voltage corners)
+set ::env(LIB) [dict create \
+	"*tt*" [list "$::env(PDK_ROOT)/$::env(PDK)/libs.ref/or1_fd_sc/lib/or1_fd_sc_TT_5P0_25C.lib"] \
+	"*ss*" [list "$::env(PDK_ROOT)/$::env(PDK)/libs.ref/or1_fd_sc/lib/or1_fd_sc_SS_4P5_85C.lib"] \
+	"*ff*" [list "$::env(PDK_ROOT)/$::env(PDK)/libs.ref/or1_fd_sc/lib/or1_fd_sc_FF_5P5_0C.lib"]]
 set ::env(DEFAULT_CORNER) "nom_tt_5P0_25C"
-# only the typical 5 V corner is characterised; do not name corners
-# that have no Liberty file
-set ::env(STA_CORNERS) [list "nom_tt_5P0_25C"]
-set ::env(TIMING_VIOLATION_CORNERS) [list "*tt*"]
-set ::env(TIMING_VIOLATION_CORNERS_OPT) [list "*tt*"]
+set ::env(STA_CORNERS) [list "nom_tt_5P0_25C" "nom_ss_4P5_85C" "nom_ff_5P5_0C"]
+set ::env(TIMING_VIOLATION_CORNERS) [list "*ss*"]
+set ::env(TIMING_VIOLATION_CORNERS_OPT) [list "*ss*"]
 
 # Constraints (librelane requires these be set)
 set ::env(CLOCK_UNCERTAINTY_CONSTRAINT) 0.25
@@ -57,8 +58,7 @@ set ::env(CLOCK_TRANSITION_CONSTRAINT) 0.15
 set ::env(TIME_DERATING_CONSTRAINT) 5
 set ::env(IO_DELAY_CONSTRAINT) 20
 
-# RCX rulesets (none; use LVS-style estimation)
-set ::env(RCX_RULESETS) [list]
+# RCX rulesets (early one set below; identical parasitics is accepted)
 
 # magic setup
 set ::env(MAGIC_MAGICRC) "$::env(PDK_ROOT)/$::env(PDK)/libs.tech/magic/OR1.magicrc"
@@ -150,9 +150,13 @@ if { ![file exists $::env(KLAYOUT_DRC_RUNSET)] } {
 
 # OpenRCX extraction rules (generated from the OR1 parasitic RC model)
 if { ![info exists ::env(TECH_LEFS)] } {
-	set ::env(TECH_LEFS) [dict create "*tt*" [list "$::env(PDK_ROOT)/$::env(PDK)/libs.ref/or1_fd_sc/lef/OR1.tlef"]]
+	set ::env(TECH_LEFS) [dict create \
+		"*" [list "$::env(PDK_ROOT)/$::env(PDK)/libs.ref/or1_fd_sc/lef/OR1.tlef"]]
 }
-set ::env(RCX_RULESETS) [dict create "*tt*" "$::env(PDK_ROOT)/$::env(PDK)/libs.tech/openroad/OR1.rcx_rules"]
+set ::env(RCX_RULESETS) [dict create \
+	"*tt*" "$::env(PDK_ROOT)/$::env(PDK)/libs.tech/openroad/OR1.rcx_rules" \
+	"*ss*" "$::env(PDK_ROOT)/$::env(PDK)/libs.tech/openroad/OR1.rcx_rules" \
+	"*ff*" "$::env(PDK_ROOT)/$::env(PDK)/libs.tech/openroad/OR1.rcx_rules"]
 
 # magic full parasitic extraction (R + C).  The RC model lives in the magic
 # tech file (extract section: resist / areacap / contact).

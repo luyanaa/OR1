@@ -20,7 +20,7 @@ rlabel metal2 s 44 18 48 22 6 D
 port 4 nsew signal input
 rlabel metal2 s 121 21 125 25 6 Q
 port 5 nsew signal output
-rlabel metal1 s 108 5 120 53 6 QB
+rlabel metal1 s 108 11 119 39 6 QB
 port 6 nsew signal output
 << properties >>
 string FIXED_BBOX 0 0 129 60
