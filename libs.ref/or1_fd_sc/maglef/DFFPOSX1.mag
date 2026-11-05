@@ -4,9 +4,10 @@ tech OR1
 rect 0 56 129 60
 rect 0 -1 129 3
 << metal2 >>
-rect 5 29 9 33
-rect 44 18 48 22
-rect 121 21 125 25
+rect 40 18 48 22
+rect 12 18 32 24
+rect 122 22 124 28
+rect 6 30 8 36
 << nwell >>
 rect 0 34 129 62
 << labels >>
@@ -14,11 +15,11 @@ rlabel metal1 s 0 56 129 60 6 VDD
 port 1 nsew power input
 rlabel metal1 s 0 -1 129 3 6 VSS
 port 2 nsew ground input
-rlabel metal2 s 5 29 9 33 6 CLK
+rlabel metal2 s 6 30 8 36 6 CLK
 port 3 nsew signal input
-rlabel metal2 s 44 18 48 22 6 D
+rlabel metal2 s 40 18 48 22 6 D
 port 4 nsew signal input
-rlabel metal2 s 121 21 125 25 6 Q
+rlabel metal2 s 122 22 124 28 6 Q
 port 5 nsew signal output
 rlabel metal1 s 108 11 119 39 6 QB
 port 6 nsew signal output

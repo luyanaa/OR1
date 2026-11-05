@@ -13,7 +13,7 @@ set ::env(SYNTH_MUX_MAP) ""
 
 # Placement site
 set ::env(PLACE_SITE) "unit"
-set ::env(PLACE_SITE_WIDTH) 0.5
+set ::env(PLACE_SITE_WIDTH) 1.0
 set ::env(PLACE_SITE_HEIGHT) 30.0
 
 # No welltap/endcap/decap/diode/antenna cells in this library; reuse FILL

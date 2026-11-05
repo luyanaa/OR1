@@ -67,14 +67,14 @@ MACRO BUFX2
     USE SIGNAL ;
     PORT
       LAYER metal2 ;
-        RECT 1.000 14.5 3.000 16.5 ;
+        RECT 1.000 15.000 3.000 18.000 ;
     END
   END A
   PIN Y    DIRECTION OUTPUT ;
     USE SIGNAL ;
     PORT
       LAYER metal2 ;
-        RECT 7.000 14 9.000 16 ;
+        RECT 7.000 14.000 9.000 18.000 ;
     END
   END Y
   OBS
@@ -116,21 +116,21 @@ MACRO DFFPOSX1
     USE SIGNAL ;
     PORT
       LAYER metal2 ;
-        RECT 2.500 14.5 4.500 16.5 ;
+        RECT 3.000 15.000 4.000 18.000 ;
     END
   END CLK
   PIN D    DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
       LAYER metal2 ;
-        RECT 22.000 9 24.000 11 ;
+        RECT 20.000 9.000 24.000 11.000 ;
     END
   END D
   PIN Q    DIRECTION OUTPUT ;
     USE SIGNAL ;
     PORT
       LAYER metal2 ;
-        RECT 60.500 10.5 62.500 12.5 ;
+        RECT 61.000 11.000 62.000 14.000 ;
     END
   END Q
   PIN QB
@@ -206,14 +206,14 @@ MACRO INVX1
     USE SIGNAL ;
     PORT
       LAYER metal2 ;
-        RECT 1.000 14.5 3.000 16.5 ;
+        RECT 1.000 15.000 3.000 18.000 ;
     END
   END A
   PIN Y    DIRECTION OUTPUT ;
     USE SIGNAL ;
     PORT
       LAYER metal2 ;
-        RECT 4.500 10.5 6.000 12.5 ;
+        RECT 3.000 10.000 6.000 12.000 ;
     END
   END Y
   OBS
@@ -252,21 +252,21 @@ MACRO NAND2X1
     USE SIGNAL ;
     PORT
       LAYER metal2 ;
-        RECT 1.000 16.5 3.000 18.5 ;
+        RECT 1.000 15.000 3.000 18.000 ;
     END
   END A
   PIN B    DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
       LAYER metal2 ;
-        RECT 4.000 8 6.000 10 ;
+        RECT 4.000 8.000 6.000 12.000 ;
     END
   END B
   PIN Y    DIRECTION OUTPUT ;
     USE SIGNAL ;
     PORT
       LAYER metal2 ;
-        RECT 7.500 16.5 9.000 18.5 ;
+        RECT 5.000 16.000 9.000 18.000 ;
     END
   END Y
   OBS
@@ -324,21 +324,21 @@ MACRO NOR2X1
     USE SIGNAL ;
     PORT
       LAYER metal2 ;
-        RECT 1.000 14.5 3.000 16.5 ;
+        RECT 1.000 15.000 3.000 18.000 ;
     END
   END A
   PIN B    DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
       LAYER metal2 ;
-        RECT 4.000 11.5 6.000 13.5 ;
+        RECT 4.000 12.000 6.000 15.000 ;
     END
   END B
   PIN Y    DIRECTION OUTPUT ;
     USE SIGNAL ;
     PORT
       LAYER metal2 ;
-        RECT 7.500 8.5 9.000 10.5 ;
+        RECT 7.000 7.000 9.000 10.000 ;
     END
   END Y
   OBS
@@ -676,7 +676,7 @@ MACRO ANTENNAX1
     USE SIGNAL ;
     PORT
       LAYER metal2 ;
-        RECT 1 12 3 14 ;
+        RECT 1.000 12.000 3.000 14.000 ;
     END
   END DIODE
   OBS
@@ -713,14 +713,14 @@ MACRO CLKBUFX2
     USE SIGNAL ;
     PORT
       LAYER metal2 ;
-        RECT 1.000 14.5 3.000 16.5 ;
+        RECT 1.000 15.000 3.000 18.000 ;
     END
   END A
   PIN Y    DIRECTION OUTPUT ;
     USE SIGNAL ;
     PORT
       LAYER metal2 ;
-        RECT 7.000 14 9.000 16 ;
+        RECT 7.000 14.000 9.000 18.000 ;
     END
   END Y
   OBS
@@ -762,28 +762,28 @@ MACRO DFFRX1
     USE SIGNAL ;
     PORT
       LAYER metal2 ;
-        RECT 22.0 14.5 24.0 16.5 ;
+        RECT 6.750 0.200 72.000 25.000 ;
     END
   END CLK
   PIN D    DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
       LAYER metal2 ;
-        RECT 41.5 9 43.5 11 ;
+        RECT 6.750 0.200 72.000 25.000 ;
     END
   END D
   PIN RESET    DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
       LAYER metal2 ;
-        RECT 2.5 20 6.5 22 ;
+        RECT 3.000 14.700 6.000 22.000 ;
     END
   END RESET
   PIN Q    DIRECTION OUTPUT ;
     USE SIGNAL ;
     PORT
       LAYER metal2 ;
-        RECT 80.0 10.5 82.0 12.5 ;
+        RECT 80.000 11.000 82.000 14.000 ;
     END
   END Q
   PIN QB    DIRECTION OUTPUT ;
@@ -869,28 +869,28 @@ MACRO DFFRX2
     USE SIGNAL ;
     PORT
       LAYER metal2 ;
-        RECT 38.000 14.5 40.000 16.5 ;
+        RECT 6.000 0.200 88.000 25.000 ;
     END
   END CLK
   PIN D    DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
       LAYER metal2 ;
-        RECT 57.500 9 59.500 11 ;
+        RECT 6.000 0.200 88.000 25.000 ;
     END
   END D
   PIN RESET    DIRECTION INPUT ;
     USE SIGNAL ;
     PORT
       LAYER metal2 ;
-        RECT 18.500 20 22.500 22 ;
+        RECT 2.000 13.900 4.000 16.300 ;
     END
   END RESET
   PIN Q    DIRECTION OUTPUT ;
     USE SIGNAL ;
     PORT
       LAYER metal2 ;
-        RECT 96.000 10.5 98.000 12.5 ;
+        RECT 96.000 11.000 98.000 14.000 ;
     END
   END Q
   PIN QB    DIRECTION OUTPUT ;

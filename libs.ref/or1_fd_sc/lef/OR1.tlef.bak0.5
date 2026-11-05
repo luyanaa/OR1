@@ -1,0 +1,105 @@
+# OR1 (OpenRule1um) technology LEF
+# Metal: width 1.0, space 1.0 - identical to the magic tech (2 lambda) and to
+# the official KLayout DRC deck (ml1/ml2/ml3 space 1.0).  Every cell in
+# or1_fd_sc meets the 1.0 um metal spacing (KLayout deck: 0 violations).
+# Cuts: 1x1 um, space 0.5 um (deck dm_via1/dm_via2 space 0.5).
+# Grid pitch 2.0um for ML1 (H), ML2 (V), ML3 (H)
+VERSION 5.4 ;
+NAMESCASESENSITIVE ON ;
+BUSBITCHARS "[]" ;
+DIVIDERCHAR "/" ;
+UNITS
+  DATABASE MICRONS 1000 ;
+END UNITS
+
+MANUFACTURINGGRID 0.1 ;
+
+
+
+
+
+
+
+LAYER metal1
+  TYPE		ROUTING ;
+  DIRECTION	HORIZONTAL ;
+  PITCH		2.0 ;
+  OFFSET	1.0 ;
+  WIDTH		1.0 ;
+  SPACING	1.0 ;
+  THICKNESS	0.55 ;
+  RESISTANCE	RPERSQ 0.0509 ;
+  CAPACITANCE	CPERSQDIST 3.5e-05 ;
+END metal1
+
+LAYER via1
+  TYPE	CUT ;
+  WIDTH		1.0 ;
+  SPACING	0.5 ;
+END via1
+
+LAYER metal2
+  TYPE		ROUTING ;
+  DIRECTION	VERTICAL ;
+  PITCH		2.0 ;
+  OFFSET	1.0 ;
+  WIDTH		1.0 ;
+  SPACING	1.0 ;
+  THICKNESS	0.65 ;
+  RESISTANCE	RPERSQ 0.0431 ;
+  CAPACITANCE	CPERSQDIST 3.5e-05 ;
+END metal2
+
+LAYER via2
+  TYPE	CUT ;
+  WIDTH		1.0 ;
+  SPACING	0.5 ;
+END via2
+
+LAYER metal3
+  TYPE		ROUTING ;
+  DIRECTION	HORIZONTAL ;
+  PITCH		2.0 ;
+  OFFSET	1.0 ;
+  WIDTH		1.0 ;
+  SPACING	1.0 ;
+  THICKNESS	0.90 ;
+  RESISTANCE	RPERSQ 0.0311 ;
+  CAPACITANCE	CPERSQDIST 3.5e-05 ;
+END metal3
+
+
+
+VIA M2_M1 DEFAULT
+  LAYER metal1 ;
+    RECT -1.000 -1.000 1.000 1.000 ;
+  LAYER via1 ;
+    RECT -0.500 -0.500 0.500 0.500 ;
+  LAYER metal2 ;
+    RECT -1.000 -1.000 1.000 1.000 ;
+  RESISTANCE 1.0 ;
+END M2_M1
+
+VIA M3_M2 DEFAULT
+  LAYER metal2 ;
+    RECT -1.000 -1.000 1.000 1.000 ;
+  LAYER via2 ;
+    RECT -0.500 -0.500 0.500 0.500 ;
+  LAYER metal3 ;
+    RECT -1.000 -1.000 1.000 1.000 ;
+  RESISTANCE 1.0 ;
+END M3_M2
+
+SITE unit
+  CLASS CORE ;
+  SYMMETRY Y ;
+  SIZE 0.500 BY 30.000 ;
+END unit
+
+SITE core
+  CLASS CORE ;
+  SYMMETRY X Y ;
+  SIZE 0.500 BY 30.000 ;
+END core
+
+END LIBRARY

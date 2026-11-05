@@ -1,0 +1,2 @@
+{'A': [(4.0, 35.0, 'port 3 nsew signal input')], 'B': [(10.0, 18.0, 'port 4 nsew signal input')], 'Y': [(16.0, 35.0, 'port 5 nsew signal output')]}
+newrects=[(8, 16, 12, 22), (2, 30, 6, 36), (12, 34, 18, 36)]

@@ -4,9 +4,9 @@ tech OR1
 rect 0 56 19 60
 rect 0 -1 19 3
 << metal2 >>
-rect 14 17 18 21
-rect 2 29 6 33
-rect 8 23 12 27
+rect 14 14 18 20
+rect 8 24 12 30
+rect 2 30 6 36
 << nwell >>
 rect -3 35 22 62
 << labels >>
@@ -14,11 +14,11 @@ rlabel metal1 s 0 56 19 60 6 VDD
 port 1 nsew power input
 rlabel metal1 s 0 -1 19 3 6 VSS
 port 2 nsew ground input
-rlabel metal2 s 2 29 6 33 6 A
+rlabel metal2 s 2 30 6 36 6 A
 port 3 nsew signal input
-rlabel metal2 s 8 23 12 27 6 B
+rlabel metal2 s 8 24 12 30 6 B
 port 4 nsew signal input
-rlabel metal2 s 14 17 18 21 6 Y
+rlabel metal2 s 14 14 18 20 6 Y
 port 5 nsew signal output
 << properties >>
 string FIXED_BBOX 0 0 19 60

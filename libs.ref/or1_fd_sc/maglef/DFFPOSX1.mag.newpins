@@ -1,0 +1,2 @@
+{'CLK': [(7.0, 31.0, 'port 3 nsew signal input')], 'D': [(46.0, 20.0, 'port 4 nsew signal input')], 'Q': [(123.0, 23.0, 'port 5 nsew signal output')]}
+newrects=[(40, 18, 48, 22), (12, 18, 32, 24), (122, 22, 124, 28), (6, 30, 8, 36)]
